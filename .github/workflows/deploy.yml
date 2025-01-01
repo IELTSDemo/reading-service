@@ -13,6 +13,8 @@ jobs:
       # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Debug AWS_REGION
+        run: echo "AWS_REGION is ${{ secrets.AWS_REGION }}"
 
       # Log in to Amazon ECR
       - name: Log in to Amazon ECR
