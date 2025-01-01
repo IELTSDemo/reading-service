@@ -10,22 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Установить Java 21 (для сборки JAR)
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
 
-      # Сборка JAR-файла
       - name: Build JAR file
         run: mvn clean package -DskipTests
 
-      # Логин в Amazon ECR
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
         with:
@@ -35,7 +31,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
 
-      # Сборка и загрузка Docker-образа в Amazon ECR
       - name: Build, tag, and push Docker image
         env:
           AWS_REGION: us-east-1
@@ -47,7 +42,6 @@ jobs:
           docker push $IMAGE_URI
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
-      # Регистрация новой ECS Task Definition
       - name: Register ECS Task Definition
         run: |
           cat <<EOF > task-def.json
@@ -56,9 +50,9 @@ jobs:
             "containerDefinitions": [
               {
                 "name": "reading-service",
-                "image": "${{ env.IMAGE_URI }}",
-                "memory": 512,
-                "cpu": 256,
+                "image": "$IMAGE_URI",
+                "memory": 1024,
+                "cpu": 512,
                 "essential": true,
                 "portMappings": [
                   {
@@ -98,7 +92,10 @@ jobs:
                   "options": {
                     "awslogs-group": "/ecs/reading-service-task",
                     "awslogs-region": "us-east-1",
-                    "awslogs-stream-prefix": "ecs"
+                    "awslogs-stream-prefix": "ecs",
+                    "mode": "non-blocking",
+                    "awslogs-create-group": "true",
+                    "max-buffer-size": "25m"
                   }
                 }
               }
@@ -107,25 +104,31 @@ jobs:
             "cpu": "1024",
             "memory": "3072",
             "networkMode": "awsvpc",
-            "executionRoleArn": "arn:aws:iam::438465153597:role/ecsTaskExecutionRole"
+            "executionRoleArn": "arn:aws:iam::438465153597:role/ecsTaskExecutionRole",
+            "runtimePlatform": {
+              "cpuArchitecture": "X86_64",
+              "operatingSystemFamily": "LINUX"
+            }
           }
           EOF
 
-          aws ecs register-task-definition \
+          TASK_DEFINITION_ARN=$(aws ecs register-task-definition \
             --cli-input-json file://task-def.json \
-            --region us-east-1
+            --region us-east-1 \
+            --query "taskDefinition.taskDefinitionArn" \
+            --output text)
+          echo "TASK_DEFINITION_ARN=$TASK_DEFINITION_ARN" >> $GITHUB_ENV
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
 
-      # Деплой в ECS
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           cluster: ieltsdemo-cluster
           service: reading-service
-          task-definition: reading-service-task
+          task-definition: ${{ env.TASK_DEFINITION_ARN }}
           wait-for-service-stability: true
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
