@@ -48,6 +48,7 @@ jobs:
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
       # Регистрация новой ECS Task Definition
+      # Register ECS task definition
       - name: Register ECS Task Definition
         run: |
           FAMILY_NAME=reading-service-task
@@ -80,6 +81,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
+
 
       # Деплой в ECS
       - name: Deploy to ECS
