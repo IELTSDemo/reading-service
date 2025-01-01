@@ -10,17 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
+      # Clear Docker cache (опционально)
       - name: Clear Docker cache
         run: docker system prune -af
+
+      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
       # Log in to Amazon ECR
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
-        with:
-          region: ${{ secrets.AWS_REGION }}
 
       # Build and push Docker image to Amazon ECR
       - name: Build, tag, and push Docker image
