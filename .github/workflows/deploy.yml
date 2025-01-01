@@ -83,15 +83,16 @@ jobs:
           AWS_REGION: us-east-1
 
 
-      # Deploy to ECS
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          cluster: ${{ secrets.ECS_CLUSTER }}
-          service: ${{ secrets.ECS_SERVICE_READING }}
-          task-definition: reading-service-task
+          cluster: ieltsdemo-cluster # Имя вашего ECS-кластера
+          service: reading-service  # Имя вашего ECS-сервиса
+          task-definition: reading-service-task # Имя task definition
           wait-for-service-stability: true
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
+
+
