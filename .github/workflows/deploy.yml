@@ -14,13 +14,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Log in to Amazon ECR
+      # Установить Java 21 (для сборки JAR)
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      # Сборка JAR-файла
+      - name: Build JAR file
+        run: mvn clean package -DskipTests
+
+      # Логин в Amazon ECR
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
         with:
           registry-type: 'private'
 
-      # Build and push Docker image to Amazon ECR
+      # Сборка и загрузка Docker-образа в Amazon ECR
       - name: Build, tag, and push Docker image
         env:
           AWS_REGION: us-east-1
@@ -32,7 +43,7 @@ jobs:
           docker push $IMAGE_URI
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
-      # Register ECS task definition
+      # Регистрация новой ECS Task Definition
       - name: Register ECS Task Definition
         env:
           AWS_REGION: us-east-1
@@ -67,7 +78,7 @@ jobs:
             --region us-east-1
           echo "TASK_DEFINITION=$FAMILY_NAME" >> $GITHUB_ENV
 
-      # Deploy to ECS
+      # Деплой в ECS
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
