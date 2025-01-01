@@ -1,0 +1,15 @@
+spring:
+  security:
+    user:
+      name: admin  # Имя пользователя по умолчанию
+      password: secret  # Пароль по умолчанию
+  jpa:
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    root: DEBUG

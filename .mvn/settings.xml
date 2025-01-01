@@ -1,0 +1,19 @@
+<settings>
+    <profiles>
+        <profile>
+            <id>central-only</id>
+            <properties>
+                <env.JAVA_HOME>C:\Users\Almukanov\.jdks\corretto-21.0.5</env.JAVA_HOME>
+            </properties>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>central-only</activeProfile>
+    </activeProfiles>
+</settings>
