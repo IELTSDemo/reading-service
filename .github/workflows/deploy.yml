@@ -10,15 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Clear Docker cache (опционально)
+      # Очистить Docker-кэш (опционально)
       - name: Clear Docker cache
         run: docker system prune -af
 
-      # Checkout the repository
+      # Клонирование репозитория
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Log in to Amazon ECR
+      # Сборка JAR-файла
+      - name: Build JAR file
+        run: mvn clean package -DskipTests
+
+      # Логин в Amazon ECR
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
         env:
@@ -26,8 +30,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
 
-
-      # Build and push Docker image to Amazon ECR
+      # Сборка и загрузка Docker-образа в Amazon ECR
       - name: Build, tag, and push Docker image
         env:
           AWS_REGION: us-east-1
@@ -39,7 +42,7 @@ jobs:
           docker push $IMAGE_URI
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
-      # Update ECS service
+      # Обновление ECS-сервиса
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
