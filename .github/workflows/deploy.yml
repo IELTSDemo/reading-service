@@ -47,20 +47,25 @@ jobs:
           docker push $IMAGE_URI
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
-      # Обновление ECS-сервиса с новым Docker-образом
-      - name: Update ECS Service with new image
+      # Обновление Task Definition с новым Docker-образом
+      - name: Update Task Definition
         run: |
           FAMILY_NAME=reading-service-task
           IMAGE_URI=$ECR_REGISTRY/reading-service:$(git rev-parse --short HEAD)
           
-          # Обновление Task Definition с новым образом
+          # Получение текущего Task Definition без лишних полей
           TASK_DEFINITION=$(aws ecs describe-task-definition \
             --task-definition $FAMILY_NAME \
             --query "taskDefinition" \
             --output json | \
-            jq '.containerDefinitions[0].image="'$IMAGE_URI'" | del(.taskDefinitionArn, .revision, .status, .registeredBy, .registeredAt)')
+            jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredBy, .registeredAt)')
           
-          echo $TASK_DEFINITION > task-def.json
+          # Обновление Docker-образа в Task Definition
+          UPDATED_TASK_DEFINITION=$(echo $TASK_DEFINITION | jq --arg IMAGE_URI $IMAGE_URI '.containerDefinitions[0].image=$IMAGE_URI')
+          
+          echo $UPDATED_TASK_DEFINITION > task-def.json
+          
+          # Регистрация обновленного Task Definition
           aws ecs register-task-definition \
             --cli-input-json file://task-def.json \
             --region us-east-1
@@ -71,7 +76,7 @@ jobs:
             --query "taskDefinition.revision" \
             --output text)
           
-          # Обновление ECS-сервиса с новым Task Definition
+          # Обновление ECS-сервиса
           aws ecs update-service \
             --cluster ieltsdemo-cluster \
             --service reading-service \
@@ -81,4 +86,3 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
-
