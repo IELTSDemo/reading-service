@@ -50,11 +50,35 @@ jobs:
       # Обновление ECS-сервиса с новым Docker-образом
       - name: Update ECS Service with new image
         run: |
+          FAMILY_NAME=reading-service-task
+          IMAGE_URI=$ECR_REGISTRY/reading-service:$(git rev-parse --short HEAD)
+          
+          # Обновление Task Definition с новым образом
+          TASK_DEFINITION=$(aws ecs describe-task-definition \
+            --task-definition $FAMILY_NAME \
+            --query "taskDefinition" \
+            --output json | \
+            jq '.containerDefinitions[0].image="'$IMAGE_URI'" | del(.taskDefinitionArn, .revision, .status, .registeredBy, .registeredAt)')
+          
+          echo $TASK_DEFINITION > task-def.json
+          aws ecs register-task-definition \
+            --cli-input-json file://task-def.json \
+            --region us-east-1
+          
+          # Получение последней ревизии Task Definition
+          TASK_REVISION=$(aws ecs describe-task-definition \
+            --task-definition $FAMILY_NAME \
+            --query "taskDefinition.revision" \
+            --output text)
+          
+          # Обновление ECS-сервиса с новым Task Definition
           aws ecs update-service \
             --cluster ieltsdemo-cluster \
             --service reading-service \
+            --task-definition $FAMILY_NAME:$TASK_REVISION \
             --force-new-deployment
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
+
