@@ -28,6 +28,8 @@ jobs:
       # Логин в Amazon ECR
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry-type: 'private'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -36,6 +38,7 @@ jobs:
       # Сборка и загрузка Docker-образа в Amazon ECR
       - name: Build, tag, and push Docker image
         env:
+          AWS_REGION: us-east-1
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
         run: |
           IMAGE_TAG=$(git rev-parse --short HEAD)
@@ -47,29 +50,67 @@ jobs:
       # Регистрация новой ECS Task Definition
       - name: Register ECS Task Definition
         run: |
-          FAMILY_NAME=reading-service-task
-          TASK_DEFINITION=$(cat <<EOF
+          cat <<EOF > task-def.json
           {
-            "family": "$FAMILY_NAME",
+            "family": "reading-service-task",
             "containerDefinitions": [
               {
                 "name": "reading-service",
-                "image": "$IMAGE_URI",
+                "image": "${{ env.IMAGE_URI }}",
                 "memory": 512,
                 "cpu": 256,
                 "essential": true,
                 "portMappings": [
                   {
                     "containerPort": 8080,
+                    "hostPort": 8080,
                     "protocol": "tcp"
                   }
-                ]
+                ],
+                "secrets": [
+                  {
+                    "name": "SPRING_PROFILES_ACTIVE",
+                    "valueFrom": "arn:aws:ssm:us-east-1:438465153597:parameter/prod/reading-service/spring-profiles-active"
+                  },
+                  {
+                    "name": "DB_HOST",
+                    "valueFrom": "arn:aws:ssm:us-east-1:438465153597:parameter/prod/reading-service/db-host"
+                  },
+                  {
+                    "name": "DB_PORT",
+                    "valueFrom": "arn:aws:ssm:us-east-1:438465153597:parameter/prod/reading-service/db-port"
+                  },
+                  {
+                    "name": "DB_NAME",
+                    "valueFrom": "arn:aws:ssm:us-east-1:438465153597:parameter/prod/reading-service/db-name"
+                  },
+                  {
+                    "name": "DB_USERNAME",
+                    "valueFrom": "arn:aws:ssm:us-east-1:438465153597:parameter/prod/reading-service/db-username"
+                  },
+                  {
+                    "name": "DB_PASSWORD",
+                    "valueFrom": "arn:aws:ssm:us-east-1:438465153597:parameter/prod/reading-service/db-password"
+                  }
+                ],
+                "logConfiguration": {
+                  "logDriver": "awslogs",
+                  "options": {
+                    "awslogs-group": "/ecs/reading-service-task",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                  }
+                }
               }
-            ]
+            ],
+            "requiresCompatibilities": ["FARGATE"],
+            "cpu": "1024",
+            "memory": "3072",
+            "networkMode": "awsvpc",
+            "executionRoleArn": "arn:aws:iam::438465153597:role/ecsTaskExecutionRole"
           }
           EOF
-          )
-          echo "$TASK_DEFINITION" > task-def.json
+
           aws ecs register-task-definition \
             --cli-input-json file://task-def.json \
             --region us-east-1
@@ -78,13 +119,13 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
 
-      # Развертывание на ECS
+      # Деплой в ECS
       - name: Deploy to ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          cluster: ${{ secrets.ECS_CLUSTER }}  # Имя вашего ECS-кластера
-          service: ${{ secrets.ECS_SERVICE_READING }}  # Имя вашего ECS-сервиса
-          task-definition: reading-service-task  # Имя Task Definition
+          cluster: ieltsdemo-cluster
+          service: reading-service
+          task-definition: reading-service-task
           wait-for-service-stability: true
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
