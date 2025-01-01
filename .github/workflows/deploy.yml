@@ -21,10 +21,13 @@ jobs:
       # Log in to Amazon ECR
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
+        env:
+          AWS_REGION: us-east-1
 
       # Build and push Docker image to Amazon ECR
       - name: Build, tag, and push Docker image
         env:
+          AWS_REGION: us-east-1
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
         run: |
           IMAGE_TAG=$(git rev-parse --short HEAD)
@@ -40,4 +43,4 @@ jobs:
           cluster: ${{ secrets.ECS_CLUSTER }}
           service: ${{ secrets.ECS_SERVICE_READING }}
           image: ${{ env.IMAGE_URI }}
-          region: ${{ secrets.AWS_REGION }}
+          region: us-east-1
