@@ -49,11 +49,8 @@ jobs:
 
       # Регистрация новой ECS Task Definition
       - name: Register ECS Task Definition
-        env:
-          AWS_REGION: us-east-1
         run: |
           FAMILY_NAME=reading-service-task
-          IMAGE_URI=${{ env.IMAGE_URI }}
           TASK_DEFINITION=$(cat <<EOF
           {
             "family": "$FAMILY_NAME",
@@ -67,8 +64,7 @@ jobs:
                 "portMappings": [
                   {
                     "containerPort": 8080,
-                    "hostPort": 8080,
-                    "protocol": "tcp"
+                    "hostPort": 8080
                   }
                 ]
               }
@@ -76,11 +72,14 @@ jobs:
           }
           EOF
           )
-          echo "$TASK_DEFINITION" > task-def.json
+          echo $TASK_DEFINITION > task-def.json
           aws ecs register-task-definition \
             --cli-input-json file://task-def.json \
             --region us-east-1
-          echo "TASK_DEFINITION=$FAMILY_NAME" >> $GITHUB_ENV
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
 
       # Деплой в ECS
       - name: Deploy to ECS
