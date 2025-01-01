@@ -39,10 +39,10 @@ jobs:
       - name: Build, tag, and push Docker image
         env:
           AWS_REGION: us-east-1
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          ECR_REGISTRY: 438465153597.dkr.ecr.us-east-1.amazonaws.com
         run: |
           IMAGE_TAG=$(git rev-parse --short HEAD)
-          IMAGE_URI=$ECR_REGISTRY/reading-service:$IMAGE_TAG
+          IMAGE_URI=438465153597.dkr.ecr.us-east-1.amazonaws.com/reading-service:$IMAGE_TAG
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
@@ -50,7 +50,7 @@ jobs:
       - name: Update Task Definition
         run: |
           FAMILY_NAME=reading-service-task
-          IMAGE_URI=$ECR_REGISTRY/reading-service:$(git rev-parse --short HEAD)
+          IMAGE_URI=438465153597.dkr.ecr.us-east-1.amazonaws.com/reading-service:$(git rev-parse --short HEAD)
 
           # Получение текущего Task Definition без лишних полей
           TASK_DEFINITION=$(aws ecs describe-task-definition \
@@ -85,4 +85,3 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
-
