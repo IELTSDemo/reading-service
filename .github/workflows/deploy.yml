@@ -29,17 +29,17 @@ jobs:
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
         env:
-          AWS_ACCESS_KEY_ID: "AKIAEXAMPLEACCESSKEY"
-          AWS_SECRET_ACCESS_KEY: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
 
       # Сборка и загрузка Docker-образа в Amazon ECR
       - name: Build, tag, and push Docker image
         env:
-          ECR_REGISTRY: "438465153597.dkr.ecr.us-east-1.amazonaws.com"
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
         run: |
           IMAGE_TAG=$(git rev-parse --short HEAD)
-          IMAGE_URI=438465153597.dkr.ecr.us-east-1.amazonaws.com/reading-service:$IMAGE_TAG
+          IMAGE_URI=$ECR_REGISTRY/reading-service:$IMAGE_TAG
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
@@ -74,19 +74,19 @@ jobs:
             --cli-input-json file://task-def.json \
             --region us-east-1
         env:
-          AWS_ACCESS_KEY_ID: "AKIAEXAMPLEACCESSKEY"
-          AWS_SECRET_ACCESS_KEY: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
 
       # Развертывание на ECS
       - name: Deploy to ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
-          cluster: "ieltsdemo-cluster"  # Имя вашего ECS-кластера
-          service: "reading-service"  # Имя вашего ECS-сервиса
-          task-definition: "reading-service-task"  # Имя Task Definition
+          cluster: ${{ secrets.ECS_CLUSTER }}  # Имя вашего ECS-кластера
+          service: ${{ secrets.ECS_SERVICE_READING }}  # Имя вашего ECS-сервиса
+          task-definition: reading-service-task  # Имя Task Definition
           wait-for-service-stability: true
         env:
-          AWS_ACCESS_KEY_ID: "AKIAEXAMPLEACCESSKEY"
-          AWS_SECRET_ACCESS_KEY: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
