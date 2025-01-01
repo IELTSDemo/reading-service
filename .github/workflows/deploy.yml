@@ -1,16 +1,16 @@
-name: Deploy to AWS
-
-on:
-  push:
-    branches:
-      - master
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Очистить Docker-кэш (опционально)
+      # Установить Java 21
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # или 'zulu'
+          java-version: '21'
+
+      # Очистка Docker-кэша
       - name: Clear Docker cache
         run: docker system prune -af
 
