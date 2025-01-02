@@ -1,5 +1,6 @@
 package com.ieltsdemo.model.question;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
@@ -19,6 +20,7 @@ import org.springframework.data.annotation.Id;
 public abstract class Question {
     @Id
     @UuidGenerator
+    @JsonIgnore
     private String id;
     private TechnicalDetails technicalDetails;
     private int num;

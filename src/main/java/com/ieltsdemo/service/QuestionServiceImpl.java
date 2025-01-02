@@ -5,7 +5,6 @@ import com.ieltsdemo.dto.EvaluationResult;
 import com.ieltsdemo.model.UserAnswer;
 import com.ieltsdemo.model.question.Question;
 import com.ieltsdemo.repository.QuestionRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public class QuestionServiceImpl implements QuestionService {
                 if (isCorrect) {
                     score++;
                 }
-                details.add(new EvaluationDetail(question.getNum(), question.getText(), userAnswer.getAnswer(), isCorrect));
+                details.add(new EvaluationDetail(question.getNum(), question.getText(), userAnswer.getAnswer(), isCorrect, question.getRelatedTextId()));
             }
         }
         return new EvaluationResult(score, details);

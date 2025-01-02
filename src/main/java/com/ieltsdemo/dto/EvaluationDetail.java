@@ -8,11 +8,13 @@ public class EvaluationDetail {
     private String questionText;
     private String userAnswer;
     private boolean isCorrect;
+    private String correctAnswer;
 
-    public EvaluationDetail(int questionNum, String questionText, String userAnswer, boolean isCorrect) {
+    public EvaluationDetail(int questionNum, String questionText, String userAnswer, boolean isCorrect, String correctAnswer) {
         this.questionNum = questionNum;
         this.questionText = questionText;
         this.userAnswer = userAnswer;
         this.isCorrect = isCorrect;
+        this.correctAnswer = correctAnswer;
     }
 }
