@@ -4,7 +4,8 @@ server:
 spring:
   data:
     mongodb:
-      uri: ${MONGODB_URI}
+      uri: ${MONGODB_URI:mongodb+srv://ieltsdemocom:3lBurAuIYPt7XPMb@ielts-reading.zcp46.mongodb.net/?retryWrites=true&w=majority&appName=ielts-reading}
+      database: ielts-reading
   datasource:
     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     username: ${DB_USERNAME}

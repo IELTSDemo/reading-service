@@ -1,4 +1,4 @@
-package com.ieltsdemo.readingservice;
+package com.ieltsdemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
