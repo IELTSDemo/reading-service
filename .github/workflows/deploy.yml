@@ -21,6 +21,13 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      # Извлечение версии из POM файла
+      - name: Extract version from POM
+        id: get_version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       # Сборка JAR-файла
       - name: Build JAR file
         run: mvn clean package -DskipTests
@@ -41,7 +48,7 @@ jobs:
           AWS_REGION: us-east-1
           ECR_REGISTRY: 438465153597.dkr.ecr.us-east-1.amazonaws.com
         run: |
-          IMAGE_TAG=$(git rev-parse --short HEAD)
+          IMAGE_TAG=${{ env.VERSION }}
           IMAGE_URI=438465153597.dkr.ecr.us-east-1.amazonaws.com/reading-service:$IMAGE_TAG
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
@@ -50,7 +57,7 @@ jobs:
       - name: Update Task Definition
         run: |
           FAMILY_NAME=reading-service-task
-          IMAGE_URI=438465153597.dkr.ecr.us-east-1.amazonaws.com/reading-service:$(git rev-parse --short HEAD)
+          IMAGE_URI=438465153597.dkr.ecr.us-east-1.amazonaws.com/reading-service:${{ env.VERSION }}
 
           # Получение текущего Task Definition без лишних полей
           TASK_DEFINITION=$(aws ecs describe-task-definition \
