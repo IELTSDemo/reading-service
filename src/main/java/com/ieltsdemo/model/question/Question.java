@@ -20,7 +20,6 @@ import org.springframework.data.annotation.Id;
 public abstract class Question {
     @Id
     @UuidGenerator
-    @JsonIgnore
     private String id;
     private TechnicalDetails technicalDetails;
     private int num;
