@@ -42,7 +42,7 @@ jobs:
           ECR_REGISTRY: 438465153597.dkr.ecr.us-east-1.amazonaws.com
         run: |
           IMAGE_TAG=$(git rev-parse --short HEAD)
-          IMAGE_URI=438465153597.dkr.ecr.us-east-1.amazonaws.com/reading-service:$IMAGE_TAG
+          IMAGE_URI=438465153597.dkr.ecr.us-east-1.amazonaws.com/ielts-reading-service:$IMAGE_TAG
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
@@ -50,7 +50,7 @@ jobs:
       - name: Update Task Definition
         run: |
           FAMILY_NAME=reading-service-task
-          IMAGE_URI=438465153597.dkr.ecr.us-east-1.amazonaws.com/reading-service:$(git rev-parse --short HEAD)
+          IMAGE_URI=438465153597.dkr.ecr.us-east-1.amazonaws.com/ielts-reading-service:$(git rev-parse --short HEAD)
 
           # Получение текущего Task Definition без лишних полей
           TASK_DEFINITION=$(aws ecs describe-task-definition \
@@ -78,7 +78,7 @@ jobs:
           # Обновление ECS-сервиса
           aws ecs update-service \
             --cluster ieltsdemo-cluster \
-            --service reading-service \
+            --service ielts-reading-service \
             --task-definition $FAMILY_NAME:$TASK_REVISION \
             --force-new-deployment
         env:
