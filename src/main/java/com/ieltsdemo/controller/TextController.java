@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/texts")
 public class TextController {
@@ -23,6 +24,16 @@ public class TextController {
     @PostMapping
     public Text createText(@RequestBody Text text) {
         return textService.saveText(text);
+    }
+
+    @GetMapping("/{id}")
+    public Text getTextById(@PathVariable String id) {
+        return textService.findById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteText(@PathVariable String id) {
+        textService.deleteById(id);
     }
 }
 
