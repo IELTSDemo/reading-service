@@ -41,7 +41,7 @@ public class QuestionServiceImpl implements QuestionService {
                 if (isCorrect) {
                     score++;
                 }
-                details.add(new EvaluationDetail(question.getNum(), question.getText(), userAnswer.getAnswer(), isCorrect, question.getRelatedTextId()));
+                details.add(new EvaluationDetail(question.getNum(), question.getText(), userAnswer.getAnswer(), isCorrect, question.getCorrectAnswer()));
             }
         }
         return new EvaluationResult(score, details);
