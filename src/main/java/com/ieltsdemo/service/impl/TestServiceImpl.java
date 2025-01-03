@@ -1,6 +1,7 @@
 package com.ieltsdemo.service.impl;
 
 import com.ieltsdemo.dto.TestDTO;
+import com.ieltsdemo.model.Text;
 import com.ieltsdemo.repository.TextRepository;
 import com.ieltsdemo.service.TestService;
 import com.ieltsdemo.util.ExamType;
@@ -22,8 +23,10 @@ public class TestServiceImpl implements TestService {
     public List<TestDTO> getTestsByExamType(ExamType examType) {
         return textRepository.findTextByExamType(examType)
                 .stream()
-                .map(text -> new TestDTO(text.getId(), text.getTestName()))
-                .distinct()
+                .map(Text::getTestName)
+                .distinct() // Оставляем только уникальные testName
+                .map(TestDTO::new) // Создаем DTO только с testName
                 .collect(Collectors.toList());
     }
+
 }
