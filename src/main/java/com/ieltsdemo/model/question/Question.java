@@ -18,12 +18,21 @@ public abstract class Question {
     @Id
     @UuidGenerator
     private String id;
-    private TechnicalDetails technicalDetails;
+    private String technicalDetails;
     private int num; // Номер вопроса
     private String text; // Текст вопроса
     private String correctAnswer; // Правильный ответ
     private String relatedTextId; // ID текста, к которому относится вопрос
     private String tip; // Подсказка о номере абзаца
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getTip() {
         return tip;
@@ -41,11 +50,11 @@ public abstract class Question {
         this.id = id;
     }
 
-    public TechnicalDetails getTechnicalDetails() {
+    public String getTechnicalDetails() {
         return technicalDetails;
     }
 
-    public void setTechnicalDetails(TechnicalDetails technicalDetails) {
+    public void setTechnicalDetails(String technicalDetails) {
         this.technicalDetails = technicalDetails;
     }
 

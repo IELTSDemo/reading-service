@@ -41,11 +41,13 @@ public class TextServiceImpl implements TextService {
                 .stream()
                 .map(question -> new QuestionDTO(
                         question.getId(),
-                        question.getTechnicalDetails().getInstructions(),
+                        question.getTechnicalDetails(),
                         question.getNum(),
                         question.getText(),
                         question instanceof ClosedQuestion ? ((ClosedQuestion) question).getOptions() : null,
-                        question.getTip()
+                        question.getTip(),
+                        question.getCorrectAnswer(),
+                        question.getType()
                 ))
                 .collect(Collectors.toList());
         return new TextWithQuestionsDTO(text.getContent(), questions);

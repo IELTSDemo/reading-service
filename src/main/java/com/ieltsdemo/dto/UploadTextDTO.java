@@ -1,17 +1,20 @@
 package com.ieltsdemo.dto;
 
+import com.ieltsdemo.util.ExamType;
+import com.ieltsdemo.util.SectionType;
+
 import java.util.List;
 
 public class UploadTextDTO {
     private String title; // Название текста
     private String content; // Содержание текста
     private String testName; // Название теста (например, "IELTS Test 1")
-    private String section; // Секция (например, "Section 1")
+    private SectionType section; // Секция (например, "Section 1")
     private String textNumber; // Номер текста (например, "Text 1")
-    private String examType; // Тип экзамена (General или Academic)
+    private ExamType examType; // Тип экзамена (General или Academic)
     private List<QuestionDTO> questions; // Список вопросов
 
-    public UploadTextDTO(String title, String content, String testName, String section, String textNumber, String examType, List<QuestionDTO> questions) {
+    public UploadTextDTO(String title, String content, String testName, SectionType section, String textNumber, ExamType examType, List<QuestionDTO> questions) {
         this.title = title;
         this.content = content;
         this.testName = testName;
@@ -45,11 +48,11 @@ public class UploadTextDTO {
         this.testName = testName;
     }
 
-    public String getSection() {
+    public SectionType getSection() {
         return section;
     }
 
-    public void setSection(String section) {
+    public void setSection(SectionType section) {
         this.section = section;
     }
 
@@ -61,11 +64,11 @@ public class UploadTextDTO {
         this.textNumber = textNumber;
     }
 
-    public String getExamType() {
+    public ExamType getExamType() {
         return examType;
     }
 
-    public void setExamType(String examType) {
+    public void setExamType(ExamType examType) {
         this.examType = examType;
     }
 
