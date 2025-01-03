@@ -2,8 +2,10 @@ package com.ieltsdemo.controller;
 
 import com.ieltsdemo.model.question.Question;
 import com.ieltsdemo.service.QuestionService;
-import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -20,10 +22,5 @@ public class QuestionController {
     @GetMapping("/{textId}")
     public List<Question> getQuestionsByTextId(@PathVariable String textId) {
         return questionService.getQuestionsByTextId(textId);
-    }
-
-    @PostMapping
-    public Question createQuestion(@RequestBody Question question) {
-        return questionService.createQuestion(question);
     }
 }
