@@ -1,13 +1,13 @@
 package com.ieltsdemo.dto;
 
-import lombok.Data;
-
-import java.util.List;
-
-@Data
 public class TextDTO {
     private String id;
-    private String title;
-    private String content;
-    private List<ImageDTO> images;
+    private String title; // Название текста
+    private String textNumber; // Номер текста, например, "Text 1"
+
+    public TextDTO(String id, String title, String textNumber) {
+        this.id = id;
+        this.title = title;
+        this.textNumber = textNumber;
+    }
 }

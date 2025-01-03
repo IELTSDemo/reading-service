@@ -1,13 +1,10 @@
-package com.ieltsdemo.model;
+package com.ieltsdemo.dto;
 
-import lombok.Data;
+public class UserAnswerDTO {
+    private String questionId;
+    private String answer; // Ответ пользователя
 
-
-public class UserAnswer {
-    private String questionId; // ID вопроса, на который отвечает пользователь
-    private String answer;     // Ответ пользователя (текст или выбранный вариант)
-
-    public UserAnswer(String questionId, String answer) {
+    public UserAnswerDTO(String questionId, String answer) {
         this.questionId = questionId;
         this.answer = answer;
     }

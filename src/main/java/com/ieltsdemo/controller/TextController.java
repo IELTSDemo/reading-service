@@ -1,7 +1,10 @@
 package com.ieltsdemo.controller;
 
-import com.ieltsdemo.model.Text;
+import com.ieltsdemo.dto.TextDTO;
+import com.ieltsdemo.dto.TextWithQuestionsDTO;
 import com.ieltsdemo.service.TextService;
+import com.ieltsdemo.util.ExamType;
+import com.ieltsdemo.util.SectionType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/texts")
 public class TextController {
+
     private final TextService textService;
 
     public TextController(TextService textService) {
@@ -17,23 +21,12 @@ public class TextController {
     }
 
     @GetMapping
-    public List<Text> getAllTexts() {
-        return textService.findAll();
+    public List<TextDTO> getTexts(@RequestParam SectionType section, @RequestParam ExamType examType) {
+        return textService.getTextsBySectionAndExamType(section, examType);
     }
 
-    @PostMapping
-    public Text createText(@RequestBody Text text) {
-        return textService.saveText(text);
-    }
-
-    @GetMapping("/{id}")
-    public Text getTextById(@PathVariable String id) {
-        return textService.findById(id);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteText(@PathVariable String id) {
-        textService.deleteById(id);
+    @GetMapping("/{textId}")
+    public TextWithQuestionsDTO getTextAndQuestions(@PathVariable String textId) {
+        return textService.getTextAndQuestions(textId);
     }
 }
-

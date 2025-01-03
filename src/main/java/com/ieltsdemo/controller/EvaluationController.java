@@ -1,25 +1,27 @@
 package com.ieltsdemo.controller;
 
-import com.ieltsdemo.dto.EvaluationResult;
-import com.ieltsdemo.model.UserAnswer;
-import com.ieltsdemo.service.QuestionService;
-import lombok.RequiredArgsConstructor;
+import com.ieltsdemo.dto.AnswerSubmissionDTO;
+import com.ieltsdemo.dto.EvaluationResultDTO;
+import com.ieltsdemo.service.EvaluationService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/evaluate")
-@RequiredArgsConstructor
 public class EvaluationController {
 
-    private final QuestionService questionService;
+    private final EvaluationService evaluationService;
+
+    public EvaluationController(EvaluationService evaluationService) {
+        this.evaluationService = evaluationService;
+    }
 
     @PostMapping
-    public EvaluationResult evaluateAnswers(@RequestBody List<UserAnswer> userAnswers) {
-        return questionService.evaluateAnswers(userAnswers);
+    public ResponseEntity<EvaluationResultDTO> evaluateAnswers(@RequestBody AnswerSubmissionDTO submissionDTO) {
+        EvaluationResultDTO result = evaluationService.evaluateAnswers(submissionDTO);
+        return ResponseEntity.ok(result);
     }
 }
