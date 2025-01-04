@@ -1,6 +1,7 @@
 package com.ieltsdemo.service.impl;
 
 import com.ieltsdemo.dto.client.TestDTO;
+import com.ieltsdemo.dto.server.CreateTestDTO;
 import com.ieltsdemo.model.Test;
 import com.ieltsdemo.repository.TestRepository;
 import com.ieltsdemo.service.TestService;
@@ -26,4 +27,12 @@ public class TestServiceImpl implements TestService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Test createTest(CreateTestDTO createTestDTO) {
+        Test test = new Test();
+        test.setName(createTestDTO.getName());
+        test.setExamType(createTestDTO.getExamType());
+        testRepository.save(test);
+        return test;
+    }
 }
