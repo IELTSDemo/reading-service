@@ -55,6 +55,7 @@ public class UploadServiceImpl implements UploadService {
             question.setRelatedTextId(savedText.getId());
             question.setTechnicalDetails(q.getTechnicalDetails());
             question.setType(q.getType());
+            question.setExplanation(q.getExplanation());
             return question;
         }).toList();
 

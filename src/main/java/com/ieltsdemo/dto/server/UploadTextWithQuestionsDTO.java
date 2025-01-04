@@ -28,5 +28,6 @@ public class UploadTextWithQuestionsDTO {
         private QuestionType type; // Тип вопроса (OPEN, CLOSED)
         private List<String> options; // Варианты ответа (только для CLOSED)
         private String technicalDetails; // Технические детали
+        private String explanation; // Технические детали
     }
 }
