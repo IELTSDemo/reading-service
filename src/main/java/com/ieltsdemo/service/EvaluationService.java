@@ -1,8 +1,10 @@
 package com.ieltsdemo.service;
 
-import com.ieltsdemo.dto.AnswerSubmissionDTO;
-import com.ieltsdemo.dto.EvaluationResultDTO;
+import com.ieltsdemo.dto.server.answer.AnswerSubmissionDTO;
+import com.ieltsdemo.dto.client.EvaluationResultDTO;
+
+import java.util.List;
 
 public interface EvaluationService {
-    EvaluationResultDTO evaluateAnswers(AnswerSubmissionDTO submissionDTO);
+    EvaluationResultDTO evaluateAnswers(List<AnswerSubmissionDTO> answers);
 }

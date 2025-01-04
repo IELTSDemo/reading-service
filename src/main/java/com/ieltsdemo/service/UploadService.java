@@ -1,7 +1,7 @@
 package com.ieltsdemo.service;
 
-import com.ieltsdemo.dto.UploadTextDTO;
+import com.ieltsdemo.dto.server.UploadTextWithQuestionsDTO;
 
 public interface UploadService {
-    void uploadTextAndQuestions(UploadTextDTO uploadTextDTO);
+    void uploadTextWithQuestions(UploadTextWithQuestionsDTO dto);
 }

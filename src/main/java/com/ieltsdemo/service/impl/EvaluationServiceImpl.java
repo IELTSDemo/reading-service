@@ -1,16 +1,16 @@
 package com.ieltsdemo.service.impl;
 
-import com.ieltsdemo.dto.AnswerSubmissionDTO;
-import com.ieltsdemo.dto.EvaluationDetailDTO;
-import com.ieltsdemo.dto.EvaluationResultDTO;
-import com.ieltsdemo.dto.UserAnswerDTO;
+import com.ieltsdemo.dto.client.EvaluationDetailDTO;
+import com.ieltsdemo.dto.client.EvaluationResultDTO;
+import com.ieltsdemo.dto.server.answer.AnswerSubmissionDTO;
 import com.ieltsdemo.model.question.Question;
 import com.ieltsdemo.repository.QuestionRepository;
 import com.ieltsdemo.service.EvaluationService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 public class EvaluationServiceImpl implements EvaluationService {
@@ -22,26 +22,29 @@ public class EvaluationServiceImpl implements EvaluationService {
     }
 
     @Override
-    public EvaluationResultDTO evaluateAnswers(AnswerSubmissionDTO submissionDTO) {
-        List<EvaluationDetailDTO> details = new ArrayList<>();
-        int score = 0;
+    public EvaluationResultDTO evaluateAnswers(List<AnswerSubmissionDTO> answers) {
+        AtomicInteger score = new AtomicInteger();
 
-        for (UserAnswerDTO userAnswer : submissionDTO.getAnswers()) {
-            Question question = questionRepository.findById(userAnswer.getQuestionId()).orElse(null);
-            if (question == null) continue;
+        List<EvaluationDetailDTO> evaluationDetails = answers.stream().map(answer -> {
+            Question question = questionRepository.findById(answer.getQuestionId())
+                    .orElseThrow(() -> new RuntimeException("Question not found: " + answer.getQuestionId()));
 
-            boolean isCorrect = question.getCorrectAnswer().equalsIgnoreCase(userAnswer.getAnswer());
-            if (isCorrect) score++;
+            boolean isCorrect = answer.getUserAnswer().equalsIgnoreCase(question.getCorrectAnswer());
 
-            details.add(new EvaluationDetailDTO(
+            if (isCorrect) {
+                score.getAndIncrement();
+            }
+
+            return new EvaluationDetailDTO(
                     question.getNum(),
-                    question.getText(),
-                    userAnswer.getAnswer(),
+                    question.getQuestion(),
+                    answer.getUserAnswer(),
                     isCorrect,
-                    question.getCorrectAnswer()
-            ));
-        }
+                    question.getCorrectAnswer(),
+                    question.getExplanation()
+            );
+        }).collect(Collectors.toList());
 
-        return new EvaluationResultDTO(score, details);
+        return new EvaluationResultDTO(score, evaluationDetails);
     }
 }

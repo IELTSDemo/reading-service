@@ -1,14 +1,12 @@
 package com.ieltsdemo.controller;
 
-import com.ieltsdemo.dto.TextDTO;
-import com.ieltsdemo.dto.TextWithQuestionsDTO;
+import com.ieltsdemo.dto.client.TextDTO;
+import com.ieltsdemo.dto.client.TextAndQuestionsDTO;
 import com.ieltsdemo.service.TextService;
-import com.ieltsdemo.util.ExamType;
 import com.ieltsdemo.util.SectionType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/texts")
@@ -20,13 +18,26 @@ public class TextController {
         this.textService = textService;
     }
 
+    /**
+     * Получение списка текстов по ID теста и секции
+     *
+     * @param testId  ID теста
+     * @param section Секция текста
+     * @return Список текстов
+     */
     @GetMapping
-    public List<TextDTO> getTexts(@RequestParam SectionType section, @RequestParam ExamType examType) {
-        return textService.getTextsBySectionAndExamType(section, examType);
+    public List<TextDTO> getTextsByTestIdAndSection(@RequestParam String testId, @RequestParam SectionType section) {
+        return textService.findTextByTestIdAndSection(testId, section);
     }
 
+    /**
+     * Получение текста и связанных вопросов
+     *
+     * @param textId ID текста
+     * @return DTO, содержащий текст и вопросы
+     */
     @GetMapping("/{textId}")
-    public TextWithQuestionsDTO getTextAndQuestions(@PathVariable String textId) {
+    public TextAndQuestionsDTO getTextAndQuestions(@PathVariable String textId) {
         return textService.getTextAndQuestions(textId);
     }
 }

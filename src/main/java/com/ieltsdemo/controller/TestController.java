@@ -1,6 +1,6 @@
 package com.ieltsdemo.controller;
 
-import com.ieltsdemo.dto.TestDTO;
+import com.ieltsdemo.dto.client.TestDTO;
 import com.ieltsdemo.service.TestService;
 import com.ieltsdemo.util.ExamType;
 import org.springframework.web.bind.annotation.GetMapping;

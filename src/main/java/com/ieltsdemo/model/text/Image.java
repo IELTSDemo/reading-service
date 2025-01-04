@@ -1,4 +1,4 @@
-package com.ieltsdemo.model;
+package com.ieltsdemo.model.text;
 
 import lombok.Data;
 

@@ -1,31 +1,28 @@
 package com.ieltsdemo.service.impl;
 
-import com.ieltsdemo.dto.TestDTO;
-import com.ieltsdemo.model.Text;
-import com.ieltsdemo.repository.TextRepository;
+import com.ieltsdemo.dto.client.TestDTO;
+import com.ieltsdemo.model.Test;
+import com.ieltsdemo.repository.TestRepository;
 import com.ieltsdemo.service.TestService;
 import com.ieltsdemo.util.ExamType;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Data
 public class TestServiceImpl implements TestService {
 
-    private final TextRepository textRepository;
-
-    public TestServiceImpl(TextRepository textRepository) {
-        this.textRepository = textRepository;
-    }
+    private final TestRepository testRepository;
 
     @Override
     public List<TestDTO> getTestsByExamType(ExamType examType) {
-        return textRepository.findTextByExamType(examType)
+        return testRepository.findTestByExamType(examType)
                 .stream()
-                .map(Text::getTestName)
-                .distinct() // Оставляем только уникальные testName
-                .map(TestDTO::new) // Создаем DTO только с testName
+                .map(Test::getId)
+                .map(TestDTO::new) // Создаем DTO только с testId
                 .collect(Collectors.toList());
     }
 

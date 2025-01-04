@@ -1,7 +1,7 @@
 package com.ieltsdemo.service.impl;
 
-import com.ieltsdemo.dto.UploadTextDTO;
-import com.ieltsdemo.model.Text;
+import com.ieltsdemo.dto.server.UploadTextWithQuestionsDTO;
+import com.ieltsdemo.model.text.Text;
 import com.ieltsdemo.model.question.ClosedQuestion;
 import com.ieltsdemo.model.question.OpenQuestion;
 import com.ieltsdemo.model.question.Question;
@@ -24,23 +24,23 @@ public class UploadServiceImpl implements UploadService {
     }
 
     @Override
-    public void uploadTextAndQuestions(UploadTextDTO uploadTextDTO) {
+    public void uploadTextWithQuestions(UploadTextWithQuestionsDTO dto) {
         // Создаем текст
         Text text = new Text();
-        text.setTitle(uploadTextDTO.getTitle());
-        text.setContent(uploadTextDTO.getContent());
-        text.setTestName(uploadTextDTO.getTestName());
-        text.setSection(uploadTextDTO.getSection());
-        text.setTextNumber(uploadTextDTO.getTextNumber());
-        text.setExamType(uploadTextDTO.getExamType());
+        text.setIntroduction(dto.getIntroduction());
+        text.setTitle(dto.getTitle());
+        text.setContent(dto.getContent());
+        text.setSection(dto.getSection());
+        text.setTextNumber(dto.getTextNumber());
+        text.setTestId(dto.getTestId());
 
         // Сохраняем текст
         Text savedText = textRepository.save(text);
 
-        // Сохраняем вопросы
-        List<Question> questions = uploadTextDTO.getQuestions().stream().map(q -> {
+        // Создаем и сохраняем вопросы
+        List<Question> questions = dto.getQuestions().stream().map(q -> {
             Question question;
-            if ("CLOSED".equalsIgnoreCase(q.getType())) {
+            if ("CLOSED".equalsIgnoreCase(q.getType().getValue())) {
                 ClosedQuestion closedQuestion = new ClosedQuestion();
                 closedQuestion.setOptions(q.getOptions());
                 question = closedQuestion;
@@ -48,9 +48,9 @@ public class UploadServiceImpl implements UploadService {
                 question = new OpenQuestion();
             }
             question.setNum(q.getNum());
-            question.setText(q.getText());
+            question.setQuestion(q.getText());
             question.setCorrectAnswer(q.getCorrectAnswer());
-            question.setTip(q.getTip());
+            question.setTipParagraph(q.getTip());
             question.setRelatedTextId(savedText.getId());
             question.setTechnicalDetails(q.getTechnicalDetails());
             question.setType(q.getType());

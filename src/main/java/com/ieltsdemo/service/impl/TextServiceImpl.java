@@ -1,14 +1,12 @@
 package com.ieltsdemo.service.impl;
 
-import com.ieltsdemo.dto.QuestionDTO;
-import com.ieltsdemo.dto.TextDTO;
-import com.ieltsdemo.dto.TextWithQuestionsDTO;
-import com.ieltsdemo.model.Text;
+import com.ieltsdemo.dto.client.QuestionDTO;
+import com.ieltsdemo.dto.client.TextAndQuestionsDTO;
+import com.ieltsdemo.dto.client.TextDTO;
 import com.ieltsdemo.model.question.ClosedQuestion;
-import com.ieltsdemo.repository.QuestionRepository;
+import com.ieltsdemo.model.text.Text;
 import com.ieltsdemo.repository.TextRepository;
 import com.ieltsdemo.service.TextService;
-import com.ieltsdemo.util.ExamType;
 import com.ieltsdemo.util.SectionType;
 import org.springframework.stereotype.Service;
 
@@ -20,36 +18,65 @@ import java.util.stream.Collectors;
 public class TextServiceImpl implements TextService {
 
     private final TextRepository textRepository;
-    private final QuestionRepository questionRepository;
 
-    public TextServiceImpl(TextRepository textRepository, QuestionRepository questionRepository) {
+    public TextServiceImpl(TextRepository textRepository) {
         this.textRepository = textRepository;
-        this.questionRepository = questionRepository;
     }
 
-    @Override
-    public List<TextDTO> getTextsBySectionAndExamType(SectionType section, ExamType examType) {
-        return textRepository.findTextBySectionAndExamType(section, examType).stream()
-                .map(text -> new TextDTO(text.getId(), text.getTitle(), text.getTextNumber()))
-                .collect(Collectors.toList());
-    }
 
     @Override
-    public TextWithQuestionsDTO getTextAndQuestions(String textId) {
-        Text text = textRepository.findById(textId).orElseThrow(() -> new RuntimeException("Text not found"));
-        List<QuestionDTO> questions = questionRepository.findByRelatedTextId(textId)
-                .stream()
-                .map(question -> new QuestionDTO(
-                        question.getId(),
-                        question.getTechnicalDetails(),
-                        question.getNum(),
-                        question.getText(),
-                        question instanceof ClosedQuestion ? ((ClosedQuestion) question).getOptions() : null,
-                        question.getTip(),
-                        question.getCorrectAnswer(),
-                        question.getType()
+    public List<TextDTO> findTextByTestIdAndSection(String testId, SectionType section) {
+        return textRepository.findTextByTestIdAndSection(testId, section).stream()
+                .map(text -> new TextDTO(
+                        text.getId(),
+                        text.getTitle()
                 ))
                 .collect(Collectors.toList());
-        return new TextWithQuestionsDTO(text.getContent(), questions);
+    }
+
+
+    @Override
+    public TextAndQuestionsDTO getTextAndQuestions(String textId) {
+        // Получение текста
+        Text text = textRepository.findById(textId)
+                .orElseThrow(() -> new RuntimeException("Text not found"));
+
+        // Получение вопросов, связанных с текстом
+        List<QuestionDTO> questions = text.getQuestions()
+                .stream()
+                .map(question -> {
+                    // Если вопрос закрытого типа, добавить опции
+                    if (question instanceof ClosedQuestion closedQuestion) {
+                        return new QuestionDTO(
+                                question.getId(),
+                                question.getTechnicalDetails(),
+                                question.getNum(),
+                                question.getQuestion(),
+                                question.getCorrectAnswer(),
+                                question.getTipParagraph(), // Опции для закрытого вопроса
+                                closedQuestion.getOptions(),
+                                question.getType()
+                        );
+                    } else { // Для открытого типа
+                        return new QuestionDTO(
+                                question.getId(),
+                                question.getTechnicalDetails(),
+                                question.getNum(),
+                                question.getQuestion(),
+                                question.getCorrectAnswer(),
+                                question.getTipParagraph(),
+                                question.getType()
+                        );
+                    }
+                })
+                .collect(Collectors.toList());
+
+        // Возврат DTO с текстом и вопросами
+        return new TextAndQuestionsDTO(
+                text.getTitle(),
+                text.getIntroduction(), // Описание текста
+                text.getContent(),      // Сам текст
+                questions               // Список вопросов
+        );
     }
 }
