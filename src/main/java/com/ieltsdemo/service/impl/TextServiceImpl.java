@@ -5,9 +5,11 @@ import com.ieltsdemo.dto.client.TextAndQuestionsDTO;
 import com.ieltsdemo.dto.client.TextDTO;
 import com.ieltsdemo.model.question.ClosedQuestion;
 import com.ieltsdemo.model.text.Text;
+import com.ieltsdemo.repository.QuestionRepository;
 import com.ieltsdemo.repository.TextRepository;
 import com.ieltsdemo.service.TextService;
 import com.ieltsdemo.util.SectionType;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,13 +17,12 @@ import java.util.stream.Collectors;
 
 
 @Service
+@AllArgsConstructor
 public class TextServiceImpl implements TextService {
 
     private final TextRepository textRepository;
+    private final QuestionRepository questionRepository;
 
-    public TextServiceImpl(TextRepository textRepository) {
-        this.textRepository = textRepository;
-    }
 
 
     @Override
@@ -42,7 +43,7 @@ public class TextServiceImpl implements TextService {
                 .orElseThrow(() -> new RuntimeException("Text not found"));
 
         // Получение вопросов, связанных с текстом
-        List<QuestionDTO> questions = text.getQuestions()
+        List<QuestionDTO> questions = questionRepository.findByRelatedTextId(textId)
                 .stream()
                 .map(question -> {
                     // Если вопрос закрытого типа, добавить опции

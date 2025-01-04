@@ -34,6 +34,7 @@ public class UploadServiceImpl implements UploadService {
         text.setTextNumber(dto.getTextNumber());
         text.setTestId(dto.getTestId());
 
+
         // Сохраняем текст
         Text savedText = textRepository.save(text);
 
@@ -58,5 +59,6 @@ public class UploadServiceImpl implements UploadService {
         }).toList();
 
         questionRepository.saveAll(questions);
+
     }
 }
