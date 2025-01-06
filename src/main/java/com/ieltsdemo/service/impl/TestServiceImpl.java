@@ -22,8 +22,7 @@ public class TestServiceImpl implements TestService {
     public List<TestDTO> getTestsByExamType(ExamType examType) {
         return testRepository.findTestByExamType(examType)
                 .stream()
-                .map(Test::getId)
-                .map(TestDTO::new) // Создаем DTO только с testId
+                .map(test -> new TestDTO(test.getId(), test.getName()))
                 .collect(Collectors.toList());
     }
 

@@ -7,4 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class TestDTO {
     private String id; // Название теста, например, "IELTS Test 1"
+    private String name; // Название теста, например, "IELTS Test 1"
 }
