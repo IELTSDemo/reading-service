@@ -1,8 +1,13 @@
+server:
+  port: 8080
 spring:
   security:
-    user:
-      name: admin  # Имя пользователя по умолчанию
-      password: secret  # Пароль по умолчанию
+    oauth2:
+      client:
+        registration:
+          google:
+            redirect-uri: "http://localhost:8080/reading-service/login/oauth2/code/google"
+
   jpa:
     properties:
       hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect

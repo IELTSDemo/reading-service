@@ -1,11 +1,19 @@
-  spring:
-    jpa:
-      properties:
-        hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
-      hibernate:
-        ddl-auto: validate
-      show-sql: false
+server:
+  port: 8080
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            redirect-uri: "http://ieltsdemo.com:8080/reading-service/login/oauth2/code/google"
+  jpa:
+     properties:
+       hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+     hibernate:
+       ddl-auto: validate
+     show-sql: false
 
-  logging:
-    level:
-      root: INFO
+logging:
+  level:
+    root: INFO
