@@ -19,32 +19,33 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     public CustomAuthenticationSuccessHandler(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
+
     private static final List<String> ALLOWED_EMAILS = List.of(
             "rualferz@gmail.com"
     );
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User user = (OAuth2User) authentication.getPrincipal();
         String email = user.getAttribute("email");
+
+        // Проверяем, разрешён ли email
         if (!ALLOWED_EMAILS.contains(email)) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied: Unauthorized email");
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"Access Denied: Unauthorized email\"}");
             return;
         }
+
         // Генерируем JWT токен
         String token = jwtTokenProvider.createToken(email);
 
-        // Получаем URL, откуда был начат запрос (параметр state)
-        String redirectUri = (String) request.getSession().getAttribute("redirect_uri");
+        // Формируем JSON-ответ с токеном
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        // Удаляем redirect_uri из сессии
-        request.getSession().removeAttribute("redirect_uri");
-
-        // Если redirect_uri отсутствует, перенаправляем на Swagger
-        if (redirectUri == null) {
-            redirectUri = "/reading-service/swagger-ui/index.html";
-        }
-
-        // Перенаправляем пользователя обратно на изначальный URL с токеном
-        response.sendRedirect(redirectUri + "?token=" + token);
+        String jsonResponse = String.format("{\"token\":\"%s\"}", token);
+        response.getWriter().write(jsonResponse);
     }
 }
