@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home", "/login", "/oauth2/authorization/google").permitAll() // Открытые маршруты
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**","/swagger-ui/swagger-config.js").authenticated() // Swagger защищён
-                        .requestMatchers("/api/**").authenticated() // API защищено
+                        .requestMatchers("/api/upload/**").authenticated() // API защищено
                         .anyRequest().permitAll() // Остальные маршруты доступны
                 )
                 // Добавляем JWT фильтр перед UsernamePasswordAuthenticationFilter
