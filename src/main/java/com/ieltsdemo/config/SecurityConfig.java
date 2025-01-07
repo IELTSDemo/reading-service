@@ -33,7 +33,7 @@ public class SecurityConfig {
                 )
                 // Настройка маршрутов и доступа
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home", "/login", "/oauth2/authorization/google", "/api/evaluation/submit").permitAll() // Открытые маршруты
+                        .requestMatchers("/auth/google","/", "/home", "/login", "/oauth2/authorization/google", "/api/evaluation/submit").permitAll() // Открытые маршруты
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**","/swagger-ui/swagger-config.js").authenticated() // Swagger защищён
                         .requestMatchers("/api/upload/**").authenticated() // API защищено
                         .anyRequest().permitAll() // Остальные маршруты доступны
