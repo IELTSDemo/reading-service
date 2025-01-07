@@ -25,21 +25,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         try {
-            // 1. Проверяем JWT-токен в заголовке Authorization
+            // Извлекаем токен из заголовка Authorization
             String token = getTokenFromRequest(request);
             if (token != null && jwtTokenProvider.validateToken(token)) {
+                // Устанавливаем аутентификацию, если токен валиден
                 setAuthentication(token);
             }
-
-            // 2. Проверяем API-ключ (для приложений)
-            String apiKey = request.getHeader("X-API-KEY");
-            if (apiKey != null && isValidApiKey(apiKey)) {
-                setApplicationAuthentication(apiKey);
-            }
-
         } catch (Exception ex) {
-            // Логируем ошибки для отладки
-            logger.error("Ошибка авторизации: " + ex.getMessage(), ex);
+            // При ошибке возвращаем 401 Unauthorized
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"" + ex.getMessage() + "\"}");
+            return;
         }
 
         // Передаём запрос дальше в цепочке фильтров
@@ -55,20 +52,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String getTokenFromRequest(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
-            return header.substring(7);
+            return header.substring(7); // Убираем "Bearer "
         }
         return null;
-    }
-
-    /**
-     * Проверка API-ключа
-     *
-     * @param apiKey Ключ, переданный в заголовке X-API-KEY
-     * @return true, если ключ валиден
-     */
-    private boolean isValidApiKey(String apiKey) {
-        // Пример проверки API-ключа (замените на логику проверки в вашей БД или конфигурации)
-        return "12345".equals(apiKey);
     }
 
     /**
@@ -79,21 +65,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private void setAuthentication(String token) {
         String email = jwtTokenProvider.getEmailFromToken(token);
 
-        // Устанавливаем пользователя в контекст безопасности
+        // Создаём объект аутентификации и устанавливаем в SecurityContext
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(email, null, null);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    /**
-     * Устанавливает аутентификацию для приложений (на основе API-ключа)
-     *
-     * @param apiKey API-ключ
-     */
-    private void setApplicationAuthentication(String apiKey) {
-        // В данном примере API-ключ соответствует "application" (вы можете дополнить данными из БД)
-        UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken("application", null, null);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }
