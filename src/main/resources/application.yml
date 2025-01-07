@@ -32,8 +32,8 @@ spring:
     driver-class-name: org.postgresql.Driver
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
-springdoc:
-  swagger-ui:
-    config-url: /swagger-config.js
-    url: /v3/api-docs
-    layout: StandaloneLayout
+#springdoc:
+#  swagger-ui:
+#    config-url: classpath:swagger-config.js
+#    url: /v3/api-docs
+#    layout: StandaloneLayout
