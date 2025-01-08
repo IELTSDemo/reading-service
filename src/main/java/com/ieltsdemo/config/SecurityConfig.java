@@ -1,5 +1,6 @@
 package com.ieltsdemo.config;
 
+import com.ieltsdemo.security.jwt.EmailAuthorizationFilter;
 import com.ieltsdemo.security.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,9 +18,11 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final EmailAuthorizationFilter emailAuthorizationFilter;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, EmailAuthorizationFilter emailAuthorizationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.emailAuthorizationFilter = emailAuthorizationFilter;
     }
 
     @Bean
@@ -41,6 +44,7 @@ public class SecurityConfig {
                         // Любые другие запросы
                         .anyRequest().permitAll()
                 )
+                .addFilterBefore(emailAuthorizationFilter, JwtAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Добавляем JWT фильтр
 
         return http.build();
