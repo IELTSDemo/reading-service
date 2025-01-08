@@ -13,11 +13,10 @@ import java.util.Map;
 public class AuthController {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final AllowedEmailsService allowedEmailsService;
+   // private final AllowedEmailsService allowedEmailsService;
 
-    public AuthController(JwtTokenProvider jwtTokenProvider, AllowedEmailsService allowedEmailsService) {
+    public AuthController(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
-        this.allowedEmailsService = allowedEmailsService;
     }
 
     @PostMapping("/auth/google")
@@ -34,9 +33,9 @@ public class AuthController {
             Map<String, Object> body = response.getBody();
             assert body != null;
             String email = (String) body.get("email");
-            if (!allowedEmailsService.isEmailAllowed(email)) {
-                return ResponseEntity.status(403).body("Access Denied: Unauthorized email");
-            }
+//            if (!allowedEmailsService.isEmailAllowed(email)) {
+//                return ResponseEntity.status(403).body("Access Denied: Unauthorized email");
+//            }
             // Генерация собственного JWT
             String jwt = jwtTokenProvider.createToken(email);
 
