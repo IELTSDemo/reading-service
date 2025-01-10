@@ -51,13 +51,7 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     public void deleteResult(String textId, String email) {
-        Optional<ArrayList<Result>> optionalResults = resultRepository.findResultsByTextIdAndEmailAndDeleted(textId, email, false);
-        optionalResults.ifPresent(results -> {
-            for (Result result : results) {
-                result.setDeleted(true);  // Устанавливаем deleted = true для каждого результата
-            }
-            resultRepository.saveAll(results); // Сохраняем изменения в базе данных
-        });
+        resultRepository.updateDeletedByEmailAndTextIdAndDeletedFalse(textId, email, true);
     }
 
 }
