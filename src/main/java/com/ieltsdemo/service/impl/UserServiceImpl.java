@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User findOrCreateUser(String email) {
         // Проверяем, есть ли пользователь с таким email
-        return userRepository.findUserByEmail(email).orElseGet(() -> {
+        return userRepository.findFirstByEmail(email).orElseGet(() -> {
             // Если пользователя нет, создаём нового
             User newUser = new User();
             newUser.setEmail(email);

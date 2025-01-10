@@ -32,7 +32,7 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public List<TestDTO> getTestsByExamTypeAndUser(String email, ExamType examType) {
-        User user = userRepository.findUserByEmail(email).orElse(null);
+        User user = userRepository.findFirstByEmail(email).orElse(null);
         return testRepository.findTestByExamType(examType)
                 .stream()
                 .map(test -> {

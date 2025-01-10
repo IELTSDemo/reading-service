@@ -30,7 +30,7 @@ public class ResultServiceImpl implements ResultService {
         User transientUser = result.getUser();
         if (transientUser != null) {
             // Ищем пользователя по email в базе данных
-            User existingUser = userRepository.findUserByEmail(transientUser.getEmail()).orElse(null);
+            User existingUser = userRepository.findFirstByEmail(transientUser.getEmail()).orElse(null);
             if (existingUser != null) {
                 // Используем существующего пользователя
                 result.setUser(existingUser);
