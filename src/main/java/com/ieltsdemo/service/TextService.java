@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface TextService {
     List<TextDTO> findTextByTestIdAndSection(String testId, SectionType section);
-    TextAndQuestionsDTO getTextAndQuestions(String textId);
+    TextAndQuestionsDTO getTextAndQuestions(String textId, String email);
 
 }

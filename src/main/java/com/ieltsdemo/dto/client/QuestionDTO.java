@@ -15,8 +15,9 @@ public class QuestionDTO {
     private int tip; // Подсказка о номере абзаца
     private List<String> options; // Варианты ответа (для закрытых вопросов)
     private QuestionType type;
+    private boolean hasAnswered;
 
-    public QuestionDTO(String id, String technicalDetails, int num, String text, String correctAnswer, int tip, QuestionType type) {
+    public QuestionDTO(String id, String technicalDetails, int num, String text, String correctAnswer, int tip, QuestionType type, boolean hasAnswered) {
         this.id = id;
         this.technicalDetails = technicalDetails;
         this.num = num;
@@ -24,9 +25,10 @@ public class QuestionDTO {
         this.correctAnswer = correctAnswer;
         this.tip = tip;
         this.type = type;
+        this.hasAnswered = hasAnswered;
     }
 
-    public QuestionDTO(String id, String technicalDetails, int num, String text, String correctAnswer, int tip, List<String> options, QuestionType type) {
+    public QuestionDTO(String id, String technicalDetails, int num, String text, String correctAnswer, int tip, List<String> options, QuestionType type, boolean hasAnswered) {
         this.id = id;
         this.technicalDetails = technicalDetails;
         this.num = num;
@@ -35,5 +37,6 @@ public class QuestionDTO {
         this.tip = tip;
         this.options = options;
         this.type = type;
+        this.hasAnswered = hasAnswered;
     }
 }

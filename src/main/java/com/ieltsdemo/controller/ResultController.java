@@ -24,4 +24,9 @@ public class ResultController {
     public Result createResult(@RequestBody Result result) {
         return resultService.createResult(result);
     }
+
+    @PostMapping("/reset")
+    public void deleteResult(@RequestBody String textId, @RequestBody String email) {
+        resultService.deleteResult(textId, email);
+    }
 }

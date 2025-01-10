@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -28,6 +29,7 @@ public class TextServiceImpl implements TextService {
     private final TextRepository textRepository;
     private final QuestionRepository questionRepository;
     private final TestRepository testRepository;
+    private final ResultRepository resultRepository;
 
 
     @Override
@@ -42,7 +44,10 @@ public class TextServiceImpl implements TextService {
 
 
     @Override
-    public TextAndQuestionsDTO getTextAndQuestions(String textId) {
+    public TextAndQuestionsDTO getTextAndQuestions(String textId, String email) {
+        //Отвечал ли юзер?
+        Optional<Result> result = resultRepository.findResultsByTextIdAndEmailAndDeleted(textId,email,false);
+        boolean hasAnswered = result.isPresent();
         // Получение текста
         Text text = textRepository.findById(textId)
                 .orElseThrow(() -> new RuntimeException("Text not found"));
@@ -61,7 +66,8 @@ public class TextServiceImpl implements TextService {
                                 question.getCorrectAnswer(),
                                 question.getTipParagraph(), // Опции для закрытого вопроса
                                 closedQuestion.getOptions(),
-                                question.getType()
+                                question.getType(),
+                                hasAnswered
                         );
                     } else { // Для открытого типа
                         return new QuestionDTO(
@@ -71,7 +77,8 @@ public class TextServiceImpl implements TextService {
                                 question.getQuestion(),
                                 question.getCorrectAnswer(),
                                 question.getTipParagraph(),
-                                question.getType()
+                                question.getType(),
+                                hasAnswered
                         );
                     }
                 })

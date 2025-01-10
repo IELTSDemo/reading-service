@@ -37,7 +37,10 @@ public class TextController {
      * @return DTO, содержащий текст и вопросы
      */
     @GetMapping("/{textId}")
-    public TextAndQuestionsDTO getTextAndQuestions(@PathVariable String textId) {
-        return textService.getTextAndQuestions(textId);
+    public TextAndQuestionsDTO getTextAndQuestions(
+            @PathVariable String textId,
+            @RequestParam String email) {
+        return textService.getTextAndQuestions(textId, email);
     }
+
 }

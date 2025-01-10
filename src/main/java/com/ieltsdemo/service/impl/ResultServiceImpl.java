@@ -8,6 +8,7 @@ import com.ieltsdemo.service.ResultService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ResultServiceImpl implements ResultService {
@@ -45,5 +46,11 @@ public class ResultServiceImpl implements ResultService {
 
         // Теперь связанный User персистентен, сохраняем Result
         return resultRepository.save(result);
+    }
+
+    @Override
+    public void deleteResult(String textId, String email) {
+        Optional<Result> result = resultRepository.findResultsByTextIdAndEmailAndDeleted(textId, email, false);
+        result.ifPresent(Result::markAsDeleted);
     }
 }
