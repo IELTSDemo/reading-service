@@ -16,7 +16,7 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
 
     Optional<ArrayList<Result>> findResultsByTextIdAndEmailAndDeleted(String textId, String email, boolean deleted);
 
-    void updateDeletedByEmailAndTextIdAndDeletedFalse(String email, String textId, boolean deleted);
+    void deleteAllByEmailAndTextIdAndDeleted(String email, String textId, boolean deleted);
 
 
 }

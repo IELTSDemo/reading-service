@@ -51,7 +51,7 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     public void deleteResult(String textId, String email) {
-        resultRepository.updateDeletedByEmailAndTextIdAndDeletedFalse(textId, email, true);
+        resultRepository.deleteAllByEmailAndTextIdAndDeleted(textId, email, false);
     }
 
 }
