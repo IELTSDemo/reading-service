@@ -1,7 +1,9 @@
 package com.ieltsdemo.controller;
 
+import com.ieltsdemo.dto.client.DeleteResultDTO;
 import com.ieltsdemo.model.Result;
 import com.ieltsdemo.service.ResultService;
+import com.mongodb.client.result.DeleteResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public class ResultController {
     }
 
     @PostMapping("/reset")
-    public void deleteResult(@RequestBody String textId, @RequestBody String email) {
-        resultService.deleteResult(textId, email);
+    public void deleteResult(@RequestBody DeleteResultDTO deleteResult) {
+        resultService.deleteResult(deleteResult);
     }
 }
