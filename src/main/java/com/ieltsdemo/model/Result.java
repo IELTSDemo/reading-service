@@ -11,9 +11,8 @@ public class Result {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "email", referencedColumnName = "email", nullable = false) // Связываемся по email
-    private User user;
+    @Column(name = "email", nullable = false)
+    private String email;
 
     @Column(name = "test_id", nullable = false)
     private String testId;
@@ -49,12 +48,12 @@ public class Result {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getTestId() {
