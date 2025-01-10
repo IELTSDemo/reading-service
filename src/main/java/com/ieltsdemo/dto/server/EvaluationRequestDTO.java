@@ -9,5 +9,5 @@ import java.util.List;
 @Data
 public class EvaluationRequestDTO {
     private List<AnswerSubmissionDTO> answers;
-    private Result result;
+    private ResultDTO result;
 }

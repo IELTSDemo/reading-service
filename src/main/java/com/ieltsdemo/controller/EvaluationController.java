@@ -30,7 +30,14 @@ public class EvaluationController {
     public ResponseEntity<EvaluationResultDTO> evaluateAnswers(@RequestBody EvaluationRequestDTO request) {
         // Извлечение данных из запроса
         List<AnswerSubmissionDTO> answers = request.getAnswers();
-        Result result = request.getResult();
+        Result result = new Result();
+        result.setTestId(request.getResult().getTestId());
+        result.setTextId(request.getResult().getTextId());
+        result.setSectionNum(request.getResult().getSectionType());
+        result.setCorrectAnswers(request.getResult().getCorrectAnswers());
+        result.setTestType(request.getResult().getExamType());
+        result.setDeleted(false);
+        result.setEmail(request.getResult().getEmail());
 
         // Оценка ответов и сохранение результата
         EvaluationResultDTO evaluationResult = evaluationService.evaluateAnswers(answers, result);

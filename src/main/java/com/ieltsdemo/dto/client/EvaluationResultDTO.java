@@ -1,7 +1,5 @@
 package com.ieltsdemo.dto.client;
 
-import com.ieltsdemo.dto.server.ResultDTO;
-import com.ieltsdemo.model.Result;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

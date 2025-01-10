@@ -10,4 +10,6 @@ public class ResultDTO {
     private String textId;
     private SectionType sectionType;
     private ExamType examType;
+    private String email;
+    private int correctAnswers;
 }
