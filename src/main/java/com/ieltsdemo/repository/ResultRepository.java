@@ -6,12 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ResultRepository extends JpaRepository<Result, Long> {
     Optional<Result> findResultByUser(User user);
 
-    ArrayList<Result> findResultsByUserAndTestIdAndDeletedIsFalse(User user, String testId);
+    ArrayList<Result> findResultsByUserAndTestIdAndDeletedFalse(User user, String testId);
 }
