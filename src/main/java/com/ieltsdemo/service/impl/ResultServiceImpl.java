@@ -7,6 +7,7 @@ import com.ieltsdemo.repository.UserRepository;
 import com.ieltsdemo.service.ResultService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +51,13 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     public void deleteResult(String textId, String email) {
-        Optional<Result> result = resultRepository.findResultsByTextIdAndEmailAndDeleted(textId, email, false);
-        result.ifPresent(Result::markAsDeleted);
+        Optional<ArrayList<Result>> optionalResults = resultRepository.findResultsByTextIdAndEmailAndDeleted(textId, email, false);
+        optionalResults.ifPresent(results -> {
+            for (Result result : results) {
+                result.setDeleted(true);  // Устанавливаем deleted = true для каждого результата
+            }
+            resultRepository.saveAll(results); // Сохраняем изменения в базе данных
+        });
     }
+
 }

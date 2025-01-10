@@ -17,6 +17,8 @@ import com.ieltsdemo.util.SectionType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,7 +48,7 @@ public class TextServiceImpl implements TextService {
     @Override
     public TextAndQuestionsDTO getTextAndQuestions(String textId, String email) {
         //Отвечал ли юзер?
-        Optional<Result> result = resultRepository.findResultsByTextIdAndEmailAndDeleted(textId,email,false);
+        Optional<ArrayList<Result>> result = resultRepository.findResultsByTextIdAndEmailAndDeleted(textId,email,false);
         boolean hasAnswered = result.isPresent();
         // Получение текста
         Text text = textRepository.findById(textId)
