@@ -7,9 +7,7 @@ import com.ieltsdemo.repository.UserRepository;
 import com.ieltsdemo.service.ResultService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ResultServiceImpl implements ResultService {
@@ -51,7 +49,7 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     public void deleteResult(String textId, String email) {
-        resultRepository.deleteAllByEmailAndTextIdAndDeleted(textId, email, false);
+        resultRepository.deleteByTextIdAndEmail(textId, email, false);
     }
 
 }
