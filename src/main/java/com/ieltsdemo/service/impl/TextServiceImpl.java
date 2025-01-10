@@ -3,11 +3,16 @@ package com.ieltsdemo.service.impl;
 import com.ieltsdemo.dto.client.QuestionDTO;
 import com.ieltsdemo.dto.client.TextAndQuestionsDTO;
 import com.ieltsdemo.dto.client.TextDTO;
+import com.ieltsdemo.dto.server.ResultDTO;
+import com.ieltsdemo.model.Result;
 import com.ieltsdemo.model.question.ClosedQuestion;
 import com.ieltsdemo.model.text.Text;
 import com.ieltsdemo.repository.QuestionRepository;
+import com.ieltsdemo.repository.ResultRepository;
+import com.ieltsdemo.repository.TestRepository;
 import com.ieltsdemo.repository.TextRepository;
 import com.ieltsdemo.service.TextService;
+import com.ieltsdemo.util.ExamType;
 import com.ieltsdemo.util.SectionType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +27,7 @@ public class TextServiceImpl implements TextService {
 
     private final TextRepository textRepository;
     private final QuestionRepository questionRepository;
-
+    private final TestRepository testRepository;
 
 
     @Override
@@ -72,12 +77,20 @@ public class TextServiceImpl implements TextService {
                 })
                 .collect(Collectors.toList());
 
+        ResultDTO resultDTO = new ResultDTO();
+        ExamType examType = testRepository.findTestById(text.getTestId()).getFirst().getExamType();
+        resultDTO.setTextId(textId);
+        resultDTO.setSectionType(text.getSection());
+        resultDTO.setTestId(text.getTestId());
+        resultDTO.setExamType(examType);
+
         // Возврат DTO с текстом и вопросами
         return new TextAndQuestionsDTO(
                 text.getTitle(),
                 text.getIntroduction(), // Описание текста
                 text.getContent(),      // Сам текст
-                questions               // Список вопросов
+                questions,               // Список вопросов
+                resultDTO
         );
     }
 }

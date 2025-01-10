@@ -1,8 +1,11 @@
 package com.ieltsdemo.controller;
 
 import com.ieltsdemo.dto.client.EvaluationResultDTO;
+import com.ieltsdemo.dto.server.EvaluationRequestDTO;
 import com.ieltsdemo.dto.server.answer.AnswerSubmissionDTO;
+import com.ieltsdemo.model.Result;
 import com.ieltsdemo.service.EvaluationService;
+import com.ieltsdemo.service.ResultService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,14 +19,22 @@ import java.util.List;
 public class EvaluationController {
 
     private final EvaluationService evaluationService;
+    private final ResultService resultService;
 
-    public EvaluationController(EvaluationService evaluationService) {
+    public EvaluationController(EvaluationService evaluationService, ResultService resultService) {
         this.evaluationService = evaluationService;
+        this.resultService = resultService;
     }
 
     @PostMapping("/submit")
-    public ResponseEntity<EvaluationResultDTO> evaluateAnswers(@RequestBody List<AnswerSubmissionDTO> answers) {
-        EvaluationResultDTO evaluationResult = evaluationService.evaluateAnswers(answers);
+    public ResponseEntity<EvaluationResultDTO> evaluateAnswers(@RequestBody EvaluationRequestDTO request) {
+        // Извлечение данных из запроса
+        List<AnswerSubmissionDTO> answers = request.getAnswers();
+        Result result = request.getResult();
+
+        // Оценка ответов и сохранение результата
+        EvaluationResultDTO evaluationResult = evaluationService.evaluateAnswers(answers, result);
+
         return ResponseEntity.ok(evaluationResult);
     }
 }

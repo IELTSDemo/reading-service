@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless режим
                 .authorizeHttpRequests(auth -> auth
                         // Открытые маршруты
-                        .requestMatchers("/auth/google", "/", "/home", "/login", "/api/evaluation/submit" ).permitAll()
+                        .requestMatchers("/auth/google", "/", "/home", "/login", "/api/evaluation/submit","api/users" ).permitAll()
 
                         // Swagger (оставьте `permitAll()` или замените на `authenticated()` для защиты)
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui/swagger-config.js").permitAll()

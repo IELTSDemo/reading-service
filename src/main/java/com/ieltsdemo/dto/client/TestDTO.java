@@ -1,5 +1,6 @@
 package com.ieltsdemo.dto.client;
 
+import com.ieltsdemo.model.Result;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,4 +9,5 @@ import lombok.Data;
 public class TestDTO {
     private String id; // Название теста, например, "IELTS Test 1"
     private String name; // Название теста, например, "IELTS Test 1"
+    private Result result; // Название теста, например, "IELTS Test 1"
 }

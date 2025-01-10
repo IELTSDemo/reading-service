@@ -29,10 +29,13 @@ spring:
       uri: ${MONGODB_URI:mongodb+srv://ieltsdemocom:3lBurAuIYPt7XPMb@ielts-reading.zcp46.mongodb.net/?retryWrites=true&w=majority&appName=ielts-reading}
       database: ielts-reading
   datasource:
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:reading_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
 #springdoc:

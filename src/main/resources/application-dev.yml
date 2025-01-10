@@ -1,6 +1,8 @@
 server:
   port: 8080
 spring:
+  config:
+    additional-location: custom-config.properties
   security:
     oauth2:
       client:
@@ -12,7 +14,7 @@ spring:
     properties:
       hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
 
 logging:

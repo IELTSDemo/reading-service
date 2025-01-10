@@ -2,8 +2,12 @@ package com.ieltsdemo.service.impl;
 
 import com.ieltsdemo.dto.client.TestDTO;
 import com.ieltsdemo.dto.server.CreateTestDTO;
+import com.ieltsdemo.model.Result;
 import com.ieltsdemo.model.Test;
+import com.ieltsdemo.model.User;
+import com.ieltsdemo.repository.ResultRepository;
 import com.ieltsdemo.repository.TestRepository;
+import com.ieltsdemo.repository.UserRepository;
 import com.ieltsdemo.service.TestService;
 import com.ieltsdemo.util.ExamType;
 import lombok.Data;
@@ -17,12 +21,28 @@ import java.util.stream.Collectors;
 public class TestServiceImpl implements TestService {
 
     private final TestRepository testRepository;
+    private final ResultRepository resultRepository;
+    private final UserRepository userRepository;
+
+    public TestServiceImpl(TestRepository testRepository, ResultRepository resultRepository, UserRepository userRepository) {
+        this.testRepository = testRepository;
+        this.resultRepository = resultRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
-    public List<TestDTO> getTestsByExamType(ExamType examType) {
+    public List<TestDTO> getTestsByExamTypeAndUser(String email, ExamType examType) {
+        User user = userRepository.findUserByEmail(email).orElse(null);
         return testRepository.findTestByExamType(examType)
                 .stream()
-                .map(test -> new TestDTO(test.getId(), test.getName()))
+                .map(test -> {
+                    // Получаем результат пользователя по ID теста
+                    Result result = resultRepository.findResultByUserAndTestId(user, test.getId())
+                            .orElse(null); // Если результат не найден, устанавливаем 0
+
+                    // Возвращаем DTO с информацией о тесте и результатах
+                    return new TestDTO(test.getId(), test.getName(), result);
+                })
                 .collect(Collectors.toList());
     }
 

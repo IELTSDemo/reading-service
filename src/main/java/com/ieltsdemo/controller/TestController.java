@@ -21,8 +21,8 @@ public class TestController {
     }
 
     @GetMapping()
-    public List<TestDTO> getTests(@RequestParam ExamType examType) {
-        return testService.getTestsByExamType(examType);
+    public List<TestDTO> getTests(@RequestParam String email, @RequestParam ExamType examType) {
+        return testService.getTestsByExamTypeAndUser(email, examType);
     }
 
 }
