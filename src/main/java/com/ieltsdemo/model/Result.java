@@ -33,11 +33,11 @@ public class Result {
     private ExamType testType;
 
     @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false;
+    private boolean deleted = false;
 
     @PreRemove
     public void markAsDeleted() {
-        this.isDeleted = true;
+        this.deleted = true;
     }
 
     // Геттеры и сеттеры
@@ -98,10 +98,10 @@ public class Result {
     }
 
     public boolean isDeleted() {
-        return isDeleted;
+        return deleted;
     }
 
     public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+        this.deleted = deleted;
     }
 }
