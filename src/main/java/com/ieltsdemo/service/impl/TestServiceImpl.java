@@ -13,6 +13,7 @@ import com.ieltsdemo.util.ExamType;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,7 @@ public class TestServiceImpl implements TestService {
                 .stream()
                 .map(test -> {
                     // Получаем результат пользователя по ID теста
-                    List<Result> result = resultRepository.findResultsByUserAndTestIdAndDeletedIsFalse(user, test.getId()); // Если результат не найден, устанавливаем 0
+                    ArrayList<Result> result = resultRepository.findResultsByUserAndTestIdAndDeletedIsFalse(user, test.getId()); // Если результат не найден, устанавливаем 0
 
                     // Возвращаем DTO с информацией о тесте и результатах
                     return new TestDTO(test.getId(), test.getName(), result);
