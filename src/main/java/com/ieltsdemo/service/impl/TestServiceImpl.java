@@ -37,8 +37,7 @@ public class TestServiceImpl implements TestService {
                 .stream()
                 .map(test -> {
                     // Получаем результат пользователя по ID теста
-                    Result result = resultRepository.findResultByUserAndTestId(user, test.getId())
-                            .orElse(null); // Если результат не найден, устанавливаем 0
+                    List<Result> result = resultRepository.findResultsByUserAndTestIdAndDeletedIsFalse(user, test.getId()); // Если результат не найден, устанавливаем 0
 
                     // Возвращаем DTO с информацией о тесте и результатах
                     return new TestDTO(test.getId(), test.getName(), result);

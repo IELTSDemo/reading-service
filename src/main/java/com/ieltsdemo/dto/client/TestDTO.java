@@ -4,10 +4,12 @@ import com.ieltsdemo.model.Result;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 public class TestDTO {
     private String id; // Название теста, например, "IELTS Test 1"
     private String name; // Название теста, например, "IELTS Test 1"
-    private Result result; // Название теста, например, "IELTS Test 1"
+    private List<Result> result;
 }
