@@ -27,17 +27,19 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public Result createResult(Result result) {
         // Предполагается, что в объекте result.user уже установлен с email
-        User transientUser = result.getUser();
+        String transientUser = result.getEmail();
         if (transientUser != null) {
             // Ищем пользователя по email в базе данных
-            User existingUser = userRepository.findFirstByEmail(transientUser.getEmail()).orElse(null);
+            User existingUser = userRepository.findFirstByEmail(transientUser).orElse(null);
             if (existingUser != null) {
                 // Используем существующего пользователя
-                result.setUser(existingUser);
+                result.getEmail();
             } else {
+                User user = new User();
+                user.setEmail(transientUser);
                 // Если пользователь не найден, сохраняем нового
-                User newUser = userRepository.save(transientUser);
-                result.setUser(newUser);
+                User newUser = userRepository.save(user);
+                result.setEmail(newUser.getEmail());
             }
         }
 
