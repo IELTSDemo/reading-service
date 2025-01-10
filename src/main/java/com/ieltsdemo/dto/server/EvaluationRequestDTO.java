@@ -1,7 +1,6 @@
 package com.ieltsdemo.dto.server;
 
 import com.ieltsdemo.dto.server.answer.AnswerSubmissionDTO;
-import com.ieltsdemo.model.Result;
 import lombok.Data;
 
 import java.util.List;

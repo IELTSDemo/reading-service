@@ -32,13 +32,12 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public List<TestDTO> getTestsByExamTypeAndUser(String email, ExamType examType) {
-        User user = userRepository.findFirstByEmail(email).orElse(null);
+    public List<TestDTO> getTestsByExamTypeAndEmail(String email, ExamType examType) {
         return testRepository.findTestByExamType(examType)
                 .stream()
                 .map(test -> {
                     // Получаем результат пользователя по ID теста
-                    ArrayList<Result> result = resultRepository.findResultsByUserAndTestIdAndDeletedFalse(user, test.getId()); // Если результат не найден, устанавливаем 0
+                    ArrayList<Result> result = resultRepository.findResultsByEmailAndTestIdAndDeletedFalse(email, test.getId()); // Если результат не найден, устанавливаем 0
 
                     // Возвращаем DTO с информацией о тесте и результатах
                     return new TestDTO(test.getId(), test.getName(), result);

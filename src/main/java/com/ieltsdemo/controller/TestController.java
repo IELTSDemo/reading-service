@@ -22,7 +22,7 @@ public class TestController {
 
     @GetMapping()
     public List<TestDTO> getTests(@RequestParam String email, @RequestParam ExamType examType) {
-        return testService.getTestsByExamTypeAndUser(email, examType);
+        return testService.getTestsByExamTypeAndEmail(email, examType);
     }
 
 }
