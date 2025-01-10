@@ -16,7 +16,7 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
 
     ArrayList<Result> findResultsByEmailAndTestIdAndDeletedFalse(String email, String testId);
 
-    Optional<ArrayList<Result>> findResultsByTextIdAndEmailAndDeleted(String textId, String email, boolean deleted);
+    boolean  existsByTextIdAndEmailAndDeleted(String textId, String email, boolean deleted);
 
     @Transactional
     @Modifying
