@@ -5,25 +5,25 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://accounts.google.com
-      client:
-        registration:
-          google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
-            scope:
-              - profile
-              - email
-            redirect-uri: ${APP_REDIRECT_URI} #"{baseUrl}/login/oauth2/code/google"
-        provider:
-          google:
-            authorization-uri: https://accounts.google.com/o/oauth2/auth
-            token-uri: https://oauth2.googleapis.com/token
-            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: https://accounts.google.com
+#      client:
+#        registration:
+#          google:
+#            client-id: ${GOOGLE_CLIENT_ID}
+#            client-secret: ${GOOGLE_CLIENT_SECRET}
+#            scope:
+#              - profile
+#              - email
+#            redirect-uri: ${APP_REDIRECT_URI} #"{baseUrl}/login/oauth2/code/google"
+#        provider:
+#          google:
+#            authorization-uri: https://accounts.google.com/o/oauth2/auth
+#            token-uri: https://oauth2.googleapis.com/token
+#            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
   data:
     mongodb:
       uri: ${MONGODB_URI:mongodb+srv://ieltsdemocom:3lBurAuIYPt7XPMb@ielts-reading.zcp46.mongodb.net/?retryWrites=true&w=majority&appName=ielts-reading}
