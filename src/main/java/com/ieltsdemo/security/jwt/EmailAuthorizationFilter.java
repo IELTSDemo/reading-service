@@ -14,6 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
+@Order(2)
 public class EmailAuthorizationFilter extends OncePerRequestFilter {
 
     private static final String ALLOWED_EMAIL = "rualferz@gmail.com";
