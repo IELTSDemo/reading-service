@@ -44,8 +44,8 @@ public class SecurityConfig {
                         // Любые другие запросы
                         .anyRequest().permitAll()
                 )
-                .addFilterAfter(emailAuthorizationFilter, JwtAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(emailAuthorizationFilter, JwtAuthenticationFilter.class)
+                .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
