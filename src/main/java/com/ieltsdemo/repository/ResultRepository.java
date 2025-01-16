@@ -15,6 +15,7 @@ import java.util.Optional;
 public interface ResultRepository extends JpaRepository<Result, Long> {
 
     ArrayList<Result> findResultsByEmailAndTestIdAndDeletedFalse(String email, String testId);
+    ArrayList<Result> findResultsByTestId(String testId);
 
     boolean  existsByTextIdAndEmailAndDeleted(String textId, String email, boolean deleted);
 

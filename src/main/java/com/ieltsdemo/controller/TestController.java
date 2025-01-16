@@ -25,4 +25,9 @@ public class TestController {
         return testService.getTestsByExamTypeAndEmail(email, examType);
     }
 
+    @GetMapping("/all")
+    public List<TestDTO> getAllTests(@RequestParam ExamType examType) {
+        return testService.getTestsByExamType(examType);
+    }
+
 }

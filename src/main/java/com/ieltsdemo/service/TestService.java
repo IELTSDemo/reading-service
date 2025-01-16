@@ -9,5 +9,8 @@ import java.util.List;
 
 public interface TestService {
     List<TestDTO> getTestsByExamTypeAndEmail(String email, ExamType examType); // General или Academic
+
+    List<TestDTO> getTestsByExamType(ExamType examType);
+
     Test createTest(CreateTestDTO createTestDTO);
 }

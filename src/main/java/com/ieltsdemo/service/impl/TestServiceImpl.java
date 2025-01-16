@@ -4,7 +4,6 @@ import com.ieltsdemo.dto.client.TestDTO;
 import com.ieltsdemo.dto.server.CreateTestDTO;
 import com.ieltsdemo.model.Result;
 import com.ieltsdemo.model.Test;
-import com.ieltsdemo.model.User;
 import com.ieltsdemo.repository.ResultRepository;
 import com.ieltsdemo.repository.TestRepository;
 import com.ieltsdemo.repository.UserRepository;
@@ -38,6 +37,20 @@ public class TestServiceImpl implements TestService {
                 .map(test -> {
                     // Получаем результат пользователя по ID теста
                     ArrayList<Result> result = resultRepository.findResultsByEmailAndTestIdAndDeletedFalse(email, test.getId()); // Если результат не найден, устанавливаем 0
+
+                    // Возвращаем DTO с информацией о тесте и результатах
+                    return new TestDTO(test.getId(), test.getName(), result);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TestDTO> getTestsByExamType(ExamType examType) {
+        return testRepository.findTestByExamType(examType)
+                .stream()
+                .map(test -> {
+                    // Получаем результат пользователя по ID теста
+                    ArrayList<Result> result = resultRepository.findResultsByTestId(test.getId()); // Если результат не найден, устанавливаем 0
 
                     // Возвращаем DTO с информацией о тесте и результатах
                     return new TestDTO(test.getId(), test.getName(), result);
