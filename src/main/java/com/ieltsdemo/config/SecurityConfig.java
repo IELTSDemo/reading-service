@@ -44,9 +44,9 @@ public class SecurityConfig {
                         // Любые другие запросы
                         .anyRequest().permitAll()
                 )
-                .addFilterBefore(emailAuthorizationFilter, JwtAuthenticationFilter.class)
-                .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                // Затем выполняется EmailAuthorizationFilter после JwtAuthenticationFilter
+                .addFilterAfter(emailAuthorizationFilter, JwtAuthenticationFilter.class);        return http.build();
     }
 
     @Bean
