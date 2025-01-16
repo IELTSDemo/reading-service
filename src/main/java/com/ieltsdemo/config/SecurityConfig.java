@@ -28,26 +28,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Включаем CORS
-                .csrf(csrf -> csrf.disable()) // Отключаем CSRF для REST API
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless режим
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Открытые маршруты
-                        .requestMatchers("/auth/google", "/", "/home", "/login", "/api/evaluation/submit","api/users" ).permitAll()
+                        .anyRequest().permitAll()  // Все запросы разрешены без аутентификации
+                );
+        // Если фильтры больше не нужны, их можно удалить
+        //.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        //.addFilterAfter(emailAuthorizationFilter, JwtAuthenticationFilter.class);
 
-                        // Swagger (оставьте `permitAll()` или замените на `authenticated()` для защиты)
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui/swagger-config.js").permitAll()
-
-                        // Защищённые маршруты
-                        .requestMatchers("/api/upload/**").authenticated()
-
-                        // Любые другие запросы
-                        .anyRequest().permitAll()
-                )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                // Затем выполняется EmailAuthorizationFilter после JwtAuthenticationFilter
-                .addFilterAfter(emailAuthorizationFilter, JwtAuthenticationFilter.class);        return http.build();
+        return http.build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
