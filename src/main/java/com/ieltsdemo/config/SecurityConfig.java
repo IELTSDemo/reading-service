@@ -1,13 +1,10 @@
 package com.ieltsdemo.config;
 
-import com.ieltsdemo.security.jwt.EmailAuthorizationFilter;
-import com.ieltsdemo.security.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -17,13 +14,6 @@ import java.util.Arrays;
 @Configuration
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final EmailAuthorizationFilter emailAuthorizationFilter;
-
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, EmailAuthorizationFilter emailAuthorizationFilter) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.emailAuthorizationFilter = emailAuthorizationFilter;
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
