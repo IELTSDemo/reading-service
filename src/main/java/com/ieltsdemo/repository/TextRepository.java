@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface TextRepository extends MongoRepository<Text, String> {
   List<Text> findTextByTestIdAndSection(String testId, SectionType section);
+  int countByTestIdAndSection(String testId, SectionType section);
 }

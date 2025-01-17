@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Data
@@ -12,5 +13,6 @@ import java.util.List;
 public class TestDTO {
     private String id; // Название теста, например, "IELTS Test 1"
     private String name; // Название теста, например, "IELTS Test 1"
+    private HashMap<String, Integer> textInSections;
     private ArrayList<Result> result;
 }
