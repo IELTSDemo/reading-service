@@ -2,6 +2,7 @@ package com.ieltsdemo.config;
 
 import com.ieltsdemo.security.jwt.EmailAuthorizationFilter;
 import com.ieltsdemo.security.jwt.JwtAuthenticationFilter;
+import com.ieltsdemo.security.jwt.OAuth2LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,10 +20,14 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final EmailAuthorizationFilter emailAuthorizationFilter;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, EmailAuthorizationFilter emailAuthorizationFilter) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
+                          EmailAuthorizationFilter emailAuthorizationFilter,
+                          OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.emailAuthorizationFilter = emailAuthorizationFilter;
+        this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
     }
 
     @Bean
@@ -46,6 +51,7 @@ public class SecurityConfig {
                         // Любые другие запросы
                         .anyRequest().permitAll()
                 )
+                .oauth2Login(oauth2 -> oauth2.successHandler(oAuth2LoginSuccessHandler))  // Настройка обработчика успеха
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(emailAuthorizationFilter, JwtAuthenticationFilter.class);
         return http.build();
