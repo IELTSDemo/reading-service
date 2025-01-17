@@ -37,6 +37,8 @@ public class SecurityConfig {
 
                         // Swagger (оставьте `permitAll()` или замените на `authenticated()` для защиты)
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui/swagger-config.js").permitAll()
+                        .requestMatchers("/health").permitAll()
+                        .requestMatchers("/actuator/health").permitAll()
 
                         // Защищённые маршруты
                         .requestMatchers("/api/upload/**").authenticated()

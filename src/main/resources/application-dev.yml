@@ -9,14 +9,12 @@ spring:
         registration:
           google:
             redirect-uri: "http://localhost:8080/reading-service/login/oauth2/code/google"
-
   jpa:
     properties:
       hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
     show-sql: true
-
 logging:
   level:
     root: DEBUG
