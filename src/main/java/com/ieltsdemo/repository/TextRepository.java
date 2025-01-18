@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface TextRepository extends MongoRepository<Text, String> {
   void deleteTextById(String id);
+  void deleteTextByTestId(String testId);
   List<Text> findTextByTestIdAndSection(String testId, SectionType section);
   int countByTestIdAndSection(String testId, SectionType section);
 }

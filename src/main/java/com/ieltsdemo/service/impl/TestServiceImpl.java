@@ -87,6 +87,10 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public void deleteTestById(String id) {
+        // Удаляем все тексты, связанные с тестом
+        textRepository.deleteTextByTestId(id);
+
+        // Удаляем сам тест
         testRepository.deleteTestById(id);
     }
 }
