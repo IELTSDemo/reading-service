@@ -62,8 +62,8 @@ jobs:
           allow-unauthenticated: true
           set-secrets: |
             DB_PASSWORD=projects/ieltsdemo-447009/secrets/DB_PASSWORD:1
-            GOOGLE_CLIENT_ID=projects/ieltsdemo-447009/secrets/DB_USERNAME:1
-            APP_REDIRECT_URI=projects/ieltsdemo-447009/secrets/DB_USERNAME:1
-            DB_HOST=projects/ieltsdemo-447009/secrets/DB_USERNAME:1
-            GOOGLE_CLIENT_SECRET=projects/ieltsdemo-447009/secrets/DB_USERNAME:1
-            SPRING_PROFILES_ACTIVE=projects/ieltsdemo-447009/secrets/DB_USERNAME:1
+            GOOGLE_CLIENT_ID=projects/ieltsdemo-447009/secrets/GOOGLE_CLIENT_ID:1
+            APP_REDIRECT_URI=projects/ieltsdemo-447009/secrets/APP_REDIRECT_URI:1
+            DB_HOST=projects/ieltsdemo-447009/secrets/DB_HOST:1
+            GOOGLE_CLIENT_SECRET=projects/ieltsdemo-447009/secrets/GOOGLE_CLIENT_SECRET:1
+            SPRING_PROFILES_ACTIVE=projects/ieltsdemo-447009/secrets/SPRING_PROFILES_ACTIVE:1
