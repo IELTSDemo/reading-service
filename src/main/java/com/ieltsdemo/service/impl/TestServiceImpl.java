@@ -84,4 +84,9 @@ public class TestServiceImpl implements TestService {
         testRepository.save(test);
         return test;
     }
+
+    @Override
+    public void deleteTestById(String id) {
+        testRepository.deleteTestById(id);
+    }
 }

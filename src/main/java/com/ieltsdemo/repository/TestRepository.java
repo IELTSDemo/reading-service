@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface TestRepository  extends MongoRepository<Test, String> {
+    void deleteTestById(String id);
     List<Test> findTestByExamType(ExamType examType);
 
     List<Test> findTestById(String id);

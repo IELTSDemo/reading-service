@@ -13,4 +13,6 @@ public interface TestService {
     List<TestDTO> getTestsByExamType(ExamType examType);
 
     Test createTest(CreateTestDTO createTestDTO);
+
+    void deleteTestById(String id);
 }

@@ -100,4 +100,9 @@ public class TextServiceImpl implements TextService {
                 resultDTO
         );
     }
+
+    @Override
+    public void deleteTextByTextId(String testId) {
+        textRepository.deleteTextById(testId);
+    }
 }

@@ -3,13 +3,11 @@ package com.ieltsdemo.controller;
 import com.ieltsdemo.dto.server.CreateTestDTO;
 import com.ieltsdemo.dto.server.UploadTextWithQuestionsDTO;
 import com.ieltsdemo.service.TestService;
+import com.ieltsdemo.service.TextService;
 import com.ieltsdemo.service.UploadService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/upload")
@@ -18,6 +16,7 @@ public class UploadController {
 
     private final UploadService uploadService;
     private final TestService testService;
+    private final TextService textService;
 
     @PostMapping("/text-with-questions")
     public ResponseEntity<String> uploadTextWithQuestions(@RequestBody UploadTextWithQuestionsDTO dto) {
@@ -30,5 +29,18 @@ public class UploadController {
         testService.createTest(createTestDTO);
         return ResponseEntity.ok("Test created successfully");
     }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteTest(@PathVariable String id) {
+        testService.deleteTestById(id);
+        return ResponseEntity.ok("Test deleted successfully");
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteText(@PathVariable String id) {
+        textService.deleteTextByTextId(id);
+        return ResponseEntity.ok("Test deleted successfully");
+    }
+
 }
 
