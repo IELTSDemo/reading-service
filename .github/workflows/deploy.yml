@@ -40,8 +40,7 @@ jobs:
 
       # Шаг 6: Настройка Docker для Google Cloud
       - name: Configure Docker for Google Cloud
-        run: |
-          gcloud auth configure-docker
+        run: gcloud auth configure-docker
 
       # Шаг 7: Сборка и загрузка Docker-образа в Google Container Registry (GCR)
       - name: Build, tag, and push Docker image
@@ -61,9 +60,9 @@ jobs:
           region: us-central1
           allow-unauthenticated: true
           set-secrets: |
-            DB_PASSWORD=projects/ieltsdemo-447009/secrets/DB_PASSWORD:1
-            GOOGLE_CLIENT_ID=projects/ieltsdemo-447009/secrets/GOOGLE_CLIENT_ID:1
-            APP_REDIRECT_URI=projects/ieltsdemo-447009/secrets/APP_REDIRECT_URI:1
-            DB_HOST=projects/ieltsdemo-447009/secrets/DB_HOST:1
-            GOOGLE_CLIENT_SECRET=projects/ieltsdemo-447009/secrets/GOOGLE_CLIENT_SECRET:1
-            SPRING_PROFILES_ACTIVE=projects/ieltsdemo-447009/secrets/SPRING_PROFILES_ACTIVE:1
+            DB_PASSWORD=DB_PASSWORD:1
+            GOOGLE_CLIENT_ID=GOOGLE_CLIENT_ID:1
+            APP_REDIRECT_URI=APP_REDIRECT_URI:1
+            DB_HOST=DB_HOST:1
+            GOOGLE_CLIENT_SECRET=GOOGLE_CLIENT_SECRET:1
+            SPRING_PROFILES_ACTIVE=SPRING_PROFILES_ACTIVE:1
