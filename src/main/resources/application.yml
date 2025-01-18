@@ -12,12 +12,12 @@ spring:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
+            client-id: ${GOOGLE_CLIENT_ID:id}
+            client-secret: ${GOOGLE_CLIENT_SECRET:secret}
             scope:
               - profile
               - email
-            redirect-uri: ${APP_REDIRECT_URI}  # "{baseUrl}/login/oauth2/code/google"
+            redirect-uri: ${APP_REDIRECT_URI:/login/oauth2/code/google}  # "{baseUrl}/login/oauth2/code/google"
         provider:
           google:
             authorization-uri: https://accounts.google.com/o/oauth2/auth
