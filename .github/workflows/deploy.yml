@@ -61,7 +61,6 @@ jobs:
           region: us-central1
           allow-unauthenticated: true
           set-secrets: |
-            DB_USERNAME=projects/ieltsdemo-447009/secrets/DB_USERNAME:1
             DB_PASSWORD=projects/ieltsdemo-447009/secrets/DB_PASSWORD:1
             GOOGLE_CLIENT_ID=projects/ieltsdemo-447009/secrets/DB_USERNAME:1
             APP_REDIRECT_URI=projects/ieltsdemo-447009/secrets/DB_USERNAME:1
