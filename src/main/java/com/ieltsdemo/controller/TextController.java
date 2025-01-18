@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/texts")
+@RequestMapping("/apis/texts")
 public class TextController {
 
     private final TextService textService;
