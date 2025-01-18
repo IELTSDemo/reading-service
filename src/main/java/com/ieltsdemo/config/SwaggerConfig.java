@@ -27,6 +27,6 @@ public class SwaggerConfig {
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")))
-                .servers(List.of(new Server().url("https://api.ieltsdemo.com"))); // Указываем сервер с https
+                .servers(List.of(new Server().url("https://api.ieltsdemo.com/reading-service"))); // Указываем сервер с https
     }
 }
