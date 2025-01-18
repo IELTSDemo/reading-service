@@ -1,6 +1,7 @@
 server:
   servlet:
     context-path: /reading-service
+  port: 8080
 
 spring:
   web:
