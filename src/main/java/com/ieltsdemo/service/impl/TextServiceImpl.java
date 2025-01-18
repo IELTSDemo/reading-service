@@ -85,7 +85,7 @@ public class TextServiceImpl implements TextService {
                 .collect(Collectors.toList());
 
         ResultDTO resultDTO = new ResultDTO();
-        ExamType examType = testRepository.findTestById(text.getTestId()).getFirst().getExamType();
+        ExamType examType = testRepository.findTestById(text.getTestId()).get(0).getExamType();
         resultDTO.setTextId(textId);
         resultDTO.setSectionType(text.getSection());
         resultDTO.setTestId(text.getTestId());
