@@ -61,8 +61,11 @@ jobs:
           allow-unauthenticated: true
           set-secrets: |
             DB_PASSWORD=DB_PASSWORD:1
+            DB_HOST=DB_HOST:1
+            DB_USER=DB_USER:1
+            DB_NAME=DB_NAME:1
+            DB_PORT=DB_PORT:1
             GOOGLE_CLIENT_ID=GOOGLE_CLIENT_ID:1
             APP_REDIRECT_URI=APP_REDIRECT_URI:1
-            DB_HOST=DB_HOST:1
             GOOGLE_CLIENT_SECRET=GOOGLE_CLIENT_SECRET:1
             SPRING_PROFILES_ACTIVE=SPRING_PROFILES_ACTIVE:1
