@@ -30,17 +30,16 @@ public class UploadController {
         return ResponseEntity.ok("Test created successfully");
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete-test/{id}")  // Используем DELETE для удаления
     public ResponseEntity<String> deleteTest(@PathVariable String id) {
         testService.deleteTestById(id);
         return ResponseEntity.ok("Test deleted successfully");
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete-text/{id}")  // Используем DELETE для удаления
     public ResponseEntity<String> deleteText(@PathVariable String id) {
         textService.deleteTextByTextId(id);
-        return ResponseEntity.ok("Test deleted successfully");
+        return ResponseEntity.ok("Text deleted successfully"); // Исправили на "Text"
     }
 
 }
-
