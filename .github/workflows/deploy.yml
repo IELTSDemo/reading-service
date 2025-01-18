@@ -10,40 +10,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout code
+      # Шаг 1: Клонирование репозитория
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Установить Java 21 (для сборки JAR)
+      # Шаг 2: Установка JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # Извлечение версии из POM файла
+      # Шаг 3: Извлечение версии из POM файла
       - name: Extract version from POM
         id: get_version
         run: |
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      # Сборка JAR-файла
+      # Шаг 4: Сборка JAR файла
       - name: Build JAR file
         run: mvn clean package -DskipTests
 
-      # Аутентификация в Google Cloud
+      # Шаг 5: Аутентификация в Google Cloud
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      # Настройка Docker для Google Cloud
+      # Шаг 6: Настройка Docker для Google Cloud
       - name: Configure Docker for Google Cloud
         run: |
           gcloud auth configure-docker
 
-      # Сборка и загрузка Docker-образа в Google Container Registry (GCR)
+      # Шаг 7: Сборка и загрузка Docker-образа в Google Container Registry (GCR)
       - name: Build, tag, and push Docker image
         run: |
           IMAGE_TAG=${{ env.VERSION }}
@@ -52,7 +52,7 @@ jobs:
           docker push $IMAGE_URI
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
-      # Деплой в Google Cloud Run
+      # Шаг 8: Деплой в Google Cloud Run с использованием секретов
       - name: Deploy to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v1
         with:
@@ -60,3 +60,11 @@ jobs:
           image: ${{ env.IMAGE_URI }}
           region: us-central1
           allow-unauthenticated: true
+          set-secrets: |
+            DB_USERNAME=projects/ieltsdemo-447009/secrets/DB_USERNAME:latest
+            DB_PASSWORD=projects/ieltsdemo-447009/secrets/DB_PASSWORD:latest
+            GOOGLE_CLIENT_ID=projects/ieltsdemo-447009/secrets/DB_USERNAME:latest
+            APP_REDIRECT_URI=projects/ieltsdemo-447009/secrets/DB_USERNAME:latest
+            DB_HOST=projects/ieltsdemo-447009/secrets/DB_USERNAME:latest
+            GOOGLE_CLIENT_SECRET=projects/ieltsdemo-447009/secrets/DB_USERNAME:latest
+            SPRING_PROFILES_ACTIVE=projects/ieltsdemo-447009/secrets/DB_USERNAME:latest
