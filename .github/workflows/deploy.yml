@@ -1,4 +1,4 @@
-name: Deploy to AWS
+name: Deploy to Google Cloud Run
 
 on:
   push:
@@ -15,11 +15,11 @@ jobs:
         uses: actions/checkout@v3
 
       # Установить Java 21 (для сборки JAR)
-      - name: Set up JDK 21
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '17'
 
       # Извлечение версии из POM файла
       - name: Extract version from POM
@@ -32,63 +32,31 @@ jobs:
       - name: Build JAR file
         run: mvn clean package -DskipTests
 
-      # Логин в Amazon ECR
-      - name: Log in to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
+      # Аутентификация в Google Cloud
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
         with:
-          registry-type: 'private'
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      # Сборка и загрузка Docker-образа в Amazon ECR
+      # Настройка Docker для Google Cloud
+      - name: Configure Docker for Google Cloud
+        run: |
+          gcloud auth configure-docker
+
+      # Сборка и загрузка Docker-образа в Google Container Registry (GCR)
       - name: Build, tag, and push Docker image
-        env:
-          AWS_REGION: us-east-1
-          ECR_REGISTRY: 438465153597.dkr.ecr.us-east-1.amazonaws.com
         run: |
           IMAGE_TAG=${{ env.VERSION }}
-          IMAGE_URI=438465153597.dkr.ecr.us-east-1.amazonaws.com/reading-service:$IMAGE_TAG
+          IMAGE_URI=gcr.io/ieltsdemo-447009/reading-service:$IMAGE_TAG
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
-      - name: Update Task Definition
-        run: |
-          FAMILY_NAME=reading-service-task
-          IMAGE_URI=438465153597.dkr.ecr.us-east-1.amazonaws.com/reading-service:${{ env.VERSION }}
-
-          # Получение текущего Task Definition без лишних полей
-          TASK_DEFINITION=$(aws ecs describe-task-definition \
-            --task-definition $FAMILY_NAME \
-            --query "taskDefinition" \
-            --output json | \
-            jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredBy, .registeredAt)')
-          
-          # Обновление Docker-образа в Task Definition
-          UPDATED_TASK_DEFINITION=$(echo $TASK_DEFINITION | jq --arg IMAGE_URI $IMAGE_URI '.containerDefinitions[0].image=$IMAGE_URI')
-          
-          echo $UPDATED_TASK_DEFINITION > task-def.json
-
-          # Регистрация обновленного Task Definition
-          aws ecs register-task-definition \
-            --cli-input-json file://task-def.json \
-            --region us-east-1
-          
-          # Получение последней ревизии Task Definition
-          TASK_REVISION=$(aws ecs describe-task-definition \
-            --task-definition $FAMILY_NAME \
-            --query "taskDefinition.revision" \
-            --output text)
-
-          # Обновление ECS-сервиса
-          aws ecs update-service \
-            --cluster ieltsdemo-cluster \
-            --service ielts-reading-service \
-            --task-definition $FAMILY_NAME:$TASK_REVISION \
-            --force-new-deployment
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
+      # Деплой в Google Cloud Run
+      - name: Deploy to Google Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v1
+        with:
+          service: reading-service
+          image: ${{ env.IMAGE_URI }}
+          region: us-central1
+          allow-unauthenticated: true
