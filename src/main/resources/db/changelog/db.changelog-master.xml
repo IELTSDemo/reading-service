@@ -10,5 +10,6 @@
     <include file="db/changelog/changesets/db.changelog-03-add-created-date.xml"/>
     <include file="db/changelog/changesets/db.changelog-04-add-created-date.xml"/>
     <include file="db/changelog/changesets/db.changelog-05-add-login-counter.xml"/>
+    <include file="db/changelog/changesets/db.changelog-06-add-last-login-date.xml"/>
 
 </databaseChangeLog>

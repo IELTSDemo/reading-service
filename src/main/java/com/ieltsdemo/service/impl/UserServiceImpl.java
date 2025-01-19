@@ -6,6 +6,7 @@ import com.ieltsdemo.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,18 +30,20 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User findOrCreateUser(String email) {
-        // Проверяем, есть ли пользователь с таким email
         return userRepository.findFirstByEmail(email).map(user -> {
-            // Если пользователь найден, инкрементируем счетчик входов
+            // Инкрементируем счетчик входов и обновляем дату последнего входа
             user.incrementLoginCounter();
+            user.setLastLoginDate(LocalDateTime.now());
             return userRepository.save(user);
         }).orElseGet(() -> {
-            // Если пользователя нет, создаём нового с нулевым счетчиком
+            // Создаём нового пользователя
             User newUser = new User();
             newUser.setEmail(email);
-            newUser.setLoginCounter(1); // Устанавливаем 1, так как это первый вход
+            newUser.setLoginCounter(1); // Первый вход
+            newUser.setLastLoginDate(LocalDateTime.now()); // Устанавливаем текущую дату
             return userRepository.save(newUser);
         });
     }
+
 
 }

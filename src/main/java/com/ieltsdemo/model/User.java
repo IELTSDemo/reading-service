@@ -1,6 +1,7 @@
 package com.ieltsdemo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -14,6 +15,9 @@ public class User {
 
     @Column(name = "login_counter", nullable = false)
     private int loginCounter = 0;
+
+    @Column(name = "last_login_date")
+    private LocalDateTime lastLoginDate;
 
     public Long getId() {
         return id;
@@ -41,5 +45,13 @@ public class User {
 
     public void incrementLoginCounter() {
         this.loginCounter++;
+    }
+
+    public LocalDateTime getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void setLastLoginDate(LocalDateTime lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
     }
 }
