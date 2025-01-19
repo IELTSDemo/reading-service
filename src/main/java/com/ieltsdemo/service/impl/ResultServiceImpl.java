@@ -1,5 +1,6 @@
 package com.ieltsdemo.service.impl;
 
+import com.ieltsdemo.dto.client.DeleteAllResultDTO;
 import com.ieltsdemo.dto.client.DeleteResultDTO;
 import com.ieltsdemo.model.Result;
 import com.ieltsdemo.model.User;
@@ -53,6 +54,13 @@ public class ResultServiceImpl implements ResultService {
         String textId = deleteResultDTO.getTextId();
         String email = deleteResultDTO.getEmail();
         resultRepository.deleteByTextIdAndEmail(textId, email, false);
+    }
+
+    @Override
+    public void deleteByTestIdAndEmail(DeleteAllResultDTO deleteAllResultDTO) {
+        String testId = deleteAllResultDTO.getTestId();
+        String email = deleteAllResultDTO.getEmail();
+        resultRepository.deleteByTestIdAndEmail(testId, email,false);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.ieltsdemo.service;
 
+import com.ieltsdemo.dto.client.DeleteAllResultDTO;
 import com.ieltsdemo.dto.client.DeleteResultDTO;
 import com.ieltsdemo.model.Result;
 import java.util.List;
@@ -9,4 +10,5 @@ public interface ResultService {
     Result createResult(Result result);
 
     void deleteResult(DeleteResultDTO deleteResultDTO);
+    void deleteByTestIdAndEmail(DeleteAllResultDTO deleteAllResultDTO);
 }

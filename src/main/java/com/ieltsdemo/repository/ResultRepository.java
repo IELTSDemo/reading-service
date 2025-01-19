@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Repository
 public interface ResultRepository extends JpaRepository<Result, Long> {
@@ -27,5 +26,10 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
                                 @Param("deleted") boolean deleted);
 
 
-
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Result r WHERE r.testId = :testId AND r.email = :email AND r.deleted = :deleted")
+    void deleteByTestIdAndEmail(@Param("testId") String testId,
+                                @Param("email") String email,
+                                @Param("deleted") boolean deleted);
 }
