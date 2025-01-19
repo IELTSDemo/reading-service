@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,6 +79,11 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public Test createTest(CreateTestDTO createTestDTO) {
+        Optional<Test> existingTest = testRepository.findByNameAndExamType(createTestDTO.getName(), createTestDTO.getExamType());
+        if (existingTest.isPresent()) {
+            throw new IllegalArgumentException("Test with name '" + createTestDTO.getName() +
+                    "' already exists for exam type '" + createTestDTO.getExamType() + "'");
+        }
         Test test = new Test();
         test.setName(createTestDTO.getName());
         test.setExamType(createTestDTO.getExamType());

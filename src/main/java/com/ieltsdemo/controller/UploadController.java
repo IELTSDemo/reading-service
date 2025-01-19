@@ -26,8 +26,12 @@ public class UploadController {
 
     @PostMapping("/create-test")
     public ResponseEntity<String> createTest(@RequestBody CreateTestDTO createTestDTO) {
-        testService.createTest(createTestDTO);
-        return ResponseEntity.ok("Test created successfully");
+        try {
+            testService.createTest(createTestDTO);
+            return ResponseEntity.ok("Test created successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/delete-test/{id}")  // Используем DELETE для удаления
