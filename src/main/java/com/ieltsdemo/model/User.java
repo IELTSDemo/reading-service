@@ -12,6 +12,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(name = "login_counter", nullable = false)
+    private int loginCounter = 0;
+
     public Long getId() {
         return id;
     }
@@ -26,5 +29,17 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getLoginCounter() {
+        return loginCounter;
+    }
+
+    public void setLoginCounter(int loginCounter) {
+        this.loginCounter = loginCounter;
+    }
+
+    public void incrementLoginCounter() {
+        this.loginCounter++;
     }
 }
