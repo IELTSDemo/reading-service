@@ -15,4 +15,5 @@ public interface TextRepository extends MongoRepository<Text, String> {
   int countByTestIdAndSection(String testId, SectionType section);
 
   Text findTextById(String id);
+  boolean existsByTitle(String title);
 }

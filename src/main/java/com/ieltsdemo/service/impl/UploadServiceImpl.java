@@ -25,6 +25,9 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public void uploadTextWithQuestions(UploadTextWithQuestionsDTO dto) {
+        if (textRepository.existsByTitle(dto.getTitle())) {
+            throw new IllegalArgumentException("Title must be unique! Another text with this title already exists.");
+        }
         // Создаем текст
         Text text = new Text();
         text.setIntroduction(dto.getIntroduction());

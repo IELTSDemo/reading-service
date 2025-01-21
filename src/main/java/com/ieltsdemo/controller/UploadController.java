@@ -20,9 +20,15 @@ public class UploadController {
 
     @PostMapping("/text-with-questions")
     public ResponseEntity<String> uploadTextWithQuestions(@RequestBody UploadTextWithQuestionsDTO dto) {
-        uploadService.uploadTextWithQuestions(dto);
-        return ResponseEntity.ok("Text with questions uploaded successfully");
+        try {
+            uploadService.uploadTextWithQuestions(dto);
+            return ResponseEntity.ok("Text with questions uploaded successfully");
+        } catch (IllegalArgumentException e) {
+            // Если title не уникален, или любая другая логика
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
+
 
     @PutMapping("/text-with-questions/{textId}")
     public ResponseEntity<String> updateTextWithQuestions(@PathVariable String textId,
