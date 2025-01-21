@@ -24,6 +24,13 @@ public class UploadController {
         return ResponseEntity.ok("Text with questions uploaded successfully");
     }
 
+    @PutMapping("/text-with-questions/{textId}")
+    public ResponseEntity<String> updateTextWithQuestions(@PathVariable String textId,
+                                                          @RequestBody UploadTextWithQuestionsDTO dto) {
+        uploadService.updateTextWithQuestions(textId, dto);
+        return ResponseEntity.ok("Text with questions updated successfully");
+    }
+
     @PostMapping("/create-test")
     public ResponseEntity<String> createTest(@RequestBody CreateTestDTO createTestDTO) {
         try {

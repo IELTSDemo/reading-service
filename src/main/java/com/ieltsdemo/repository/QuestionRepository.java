@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface QuestionRepository extends MongoRepository<Question, String> {
     List<Question> findByRelatedTextId(String relatedTextId);
+
+    void deleteQuestionByRelatedTextId(String textId);
 }

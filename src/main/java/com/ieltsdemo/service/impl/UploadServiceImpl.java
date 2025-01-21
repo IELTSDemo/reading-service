@@ -62,4 +62,49 @@ public class UploadServiceImpl implements UploadService {
         questionRepository.saveAll(questions);
 
     }
+
+        @Override
+        public void updateTextWithQuestions(String textId, UploadTextWithQuestionsDTO dto) {
+            // 1. Находим существующий текст в БД
+            Text existingText = textRepository.findById(textId)
+                    .orElseThrow(() -> new RuntimeException("Text not found: " + textId));
+
+            // 2. Обновляем поля текста
+            existingText.setIntroduction(dto.getIntroduction());
+            existingText.setTitle(dto.getTitle());
+            existingText.setContent(dto.getContent());
+            existingText.setSection(dto.getSection());
+            existingText.setTextNumber(dto.getTextNumber());
+            existingText.setTestId(dto.getTestId()); // если надо менять testId
+
+            // 3. Сохраняем изменения в тексте
+            Text savedText = textRepository.save(existingText);
+
+            // 4. Удаляем (или обновляем) старые вопросы
+            //    — самый простой путь: удалить все вопросы, связанные с этим текстом.
+            questionRepository.deleteQuestionByRelatedTextId(textId);
+
+            // 5. Создаём новые вопросы из dto (аналогично uploadTextWithQuestions)
+            List<Question> questions = dto.getQuestions().stream().map(q -> {
+                Question question;
+                if ("CLOSED".equalsIgnoreCase(q.getType().getValue())) {
+                    ClosedQuestion closedQuestion = new ClosedQuestion();
+                    closedQuestion.setOptions(q.getOptions());
+                    question = closedQuestion;
+                } else {
+                    question = new OpenQuestion();
+                }
+                question.setNum(q.getNum());
+                question.setQuestion(q.getText());
+                question.setCorrectAnswer(q.getCorrectAnswer());
+                question.setTipParagraph(q.getTip());
+                question.setRelatedTextId(savedText.getId());
+                question.setTechnicalDetails(q.getTechnicalDetails());
+                question.setType(q.getType());
+                question.setExplanation(q.getExplanation());
+                return question;
+            }).toList();
+
+            questionRepository.saveAll(questions);
+        }
 }
