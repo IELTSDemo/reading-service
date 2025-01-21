@@ -13,4 +13,6 @@ public interface TextRepository extends MongoRepository<Text, String> {
   void deleteTextByTestId(String testId);
   List<Text> findTextByTestIdAndSection(String testId, SectionType section);
   int countByTestIdAndSection(String testId, SectionType section);
+
+  Text findTextById(String id);
 }

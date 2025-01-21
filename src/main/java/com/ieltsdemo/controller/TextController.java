@@ -1,7 +1,7 @@
 package com.ieltsdemo.controller;
 
-import com.ieltsdemo.dto.client.TextDTO;
 import com.ieltsdemo.dto.client.TextAndQuestionsDTO;
+import com.ieltsdemo.dto.client.TextDTO;
 import com.ieltsdemo.service.TextService;
 import com.ieltsdemo.util.SectionType;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +41,10 @@ public class TextController {
             @PathVariable String textId,
             @RequestParam String email) {
         return textService.getTextAndQuestions(textId, email);
+    }
+    @GetMapping("/{textId}")
+    public TextAndQuestionsDTO getTextAndQuestionsByTestId(@PathVariable String textId) {
+        return textService.findTextByTextId(textId);
     }
 
 }

@@ -10,5 +10,6 @@ public interface TextService {
     List<TextDTO> findTextByTestIdAndSection(String testId, SectionType section);
     TextAndQuestionsDTO getTextAndQuestions(String textId, String email);
     void deleteTextByTextId(String testId);
+    TextAndQuestionsDTO findTextByTextId(String textId);
 
 }

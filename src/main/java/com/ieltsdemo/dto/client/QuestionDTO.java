@@ -7,6 +7,17 @@ import java.util.List;
 
 @Data
 public class QuestionDTO {
+    public QuestionDTO(String id, String technicalDetails, int num, String text, String correctAnswer, int tip, List<String> options, QuestionType type) {
+        this.id = id;
+        this.technicalDetails = technicalDetails;
+        this.num = num;
+        this.text = text;
+        this.correctAnswer = correctAnswer;
+        this.tip = tip;
+        this.options = options;
+        this.type = type;
+    }
+
     String id;
     String technicalDetails;
     private int num; // Номер вопроса
@@ -38,5 +49,15 @@ public class QuestionDTO {
         this.options = options;
         this.type = type;
         this.hasAnswered = hasAnswered;
+    }
+
+    public QuestionDTO(String id, String technicalDetails, int num, String question, String correctAnswer, int tipParagraph, QuestionType type) {
+        this.id = id;
+        this.technicalDetails = technicalDetails;
+        this.num = num;
+        this.text = question;
+        this.correctAnswer = correctAnswer;
+        this.tip = tipParagraph;
+        this.type = type;
     }
 }
