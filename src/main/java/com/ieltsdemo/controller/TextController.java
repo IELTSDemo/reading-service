@@ -42,7 +42,7 @@ public class TextController {
             @RequestParam String email) {
         return textService.getTextAndQuestions(textId, email);
     }
-    @GetMapping("/{textId}")
+    @PutMapping("/{textId}")
     public TextAndQuestionsDTO getTextAndQuestionsByTestId(@PathVariable String textId) {
         return textService.findTextByTextId(textId);
     }
