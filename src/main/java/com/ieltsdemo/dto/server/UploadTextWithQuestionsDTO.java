@@ -21,7 +21,7 @@ public class UploadTextWithQuestionsDTO {
     @Data
     @AllArgsConstructor
     public static class QuestionDTO {
-        private int num; // Номер вопроса
+        private String num; // Номер вопроса
         private String text; // Текст вопроса
         private String correctAnswer; // Правильный ответ
         private int tip; // Подсказка

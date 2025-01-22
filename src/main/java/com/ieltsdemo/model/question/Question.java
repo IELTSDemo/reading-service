@@ -23,7 +23,7 @@ public abstract class Question {
     @UuidGenerator
     private String id;
     private String technicalDetails;
-    private int num; // Номер вопроса
+    private String num; // Номер вопроса
     private String question; // Текст вопроса
     private String correctAnswer; // Правильный ответ
     private String relatedTextId; // ID текста, к которому относится вопрос
