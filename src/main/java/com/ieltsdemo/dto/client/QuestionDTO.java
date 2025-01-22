@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class QuestionDTO {
-    public QuestionDTO(String id, String technicalDetails, int num, String text, String correctAnswer, int tip, List<String> options, QuestionType type) {
+    public QuestionDTO(String id, String technicalDetails, String num, String text, String correctAnswer, int tip, List<String> options, QuestionType type) {
         this.id = id;
         this.technicalDetails = technicalDetails;
         this.num = num;
@@ -20,7 +20,7 @@ public class QuestionDTO {
 
     String id;
     String technicalDetails;
-    private int num; // Номер вопроса
+    private String num; // Номер вопроса
     private String text; // Текст вопроса
     private String correctAnswer; // Правильный ответ
     private int tip; // Подсказка о номере абзаца
@@ -28,7 +28,7 @@ public class QuestionDTO {
     private QuestionType type;
     private boolean hasAnswered;
 
-    public QuestionDTO(String id, String technicalDetails, int num, String text, String correctAnswer, int tip, QuestionType type, boolean hasAnswered) {
+    public QuestionDTO(String id, String technicalDetails, String num, String text, String correctAnswer, int tip, QuestionType type, boolean hasAnswered) {
         this.id = id;
         this.technicalDetails = technicalDetails;
         this.num = num;
@@ -39,7 +39,7 @@ public class QuestionDTO {
         this.hasAnswered = hasAnswered;
     }
 
-    public QuestionDTO(String id, String technicalDetails, int num, String text, String correctAnswer, int tip, List<String> options, QuestionType type, boolean hasAnswered) {
+    public QuestionDTO(String id, String technicalDetails, String num, String text, String correctAnswer, int tip, List<String> options, QuestionType type, boolean hasAnswered) {
         this.id = id;
         this.technicalDetails = technicalDetails;
         this.num = num;
@@ -51,7 +51,7 @@ public class QuestionDTO {
         this.hasAnswered = hasAnswered;
     }
 
-    public QuestionDTO(String id, String technicalDetails, int num, String question, String correctAnswer, int tipParagraph, QuestionType type) {
+    public QuestionDTO(String id, String technicalDetails, String num, String question, String correctAnswer, int tipParagraph, QuestionType type) {
         this.id = id;
         this.technicalDetails = technicalDetails;
         this.num = num;
