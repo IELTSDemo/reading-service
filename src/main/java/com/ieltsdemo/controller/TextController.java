@@ -36,13 +36,13 @@ public class TextController {
      * @param textId ID текста
      * @return DTO, содержащий текст и вопросы
      */
-    @GetMapping(value = "/", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/")
     public TextAndQuestionsDTO getTextAndQuestions(
             @RequestParam String textId,
             @RequestParam String email) {
         return textService.getTextAndQuestions(textId, email);
     }
-    @GetMapping(value = "/{textId}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/{textId}")
     public TextAndQuestionsDTO getTextAndQuestionsByTestId(@PathVariable String textId) {
         return textService.findTextByTextId(textId);
     }
