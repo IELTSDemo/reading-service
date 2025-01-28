@@ -26,7 +26,7 @@ public class EvaluationController {
         this.resultService = resultService;
     }
 
-    @PostMapping("/submit")
+    @PostMapping(value = "/submit", produces = "application/json;charset=UTF-8")
     public ResponseEntity<EvaluationResultDTO> evaluateAnswers(@RequestBody EvaluationRequestDTO request) {
         // Извлечение данных из запроса
         List<AnswerSubmissionDTO> answers = request.getAnswers();

@@ -18,7 +18,7 @@ public class UploadController {
     private final TestService testService;
     private final TextService textService;
 
-    @PostMapping("/text-with-questions")
+    @PostMapping(value = "/text-with-questions", produces = "application/json;charset=UTF-8")
     public ResponseEntity<String> uploadTextWithQuestions(@RequestBody UploadTextWithQuestionsDTO dto) {
         try {
             uploadService.uploadTextWithQuestions(dto);
@@ -30,14 +30,14 @@ public class UploadController {
     }
 
 
-    @PutMapping("/text-with-questions/{textId}")
+    @PutMapping(value = "/text-with-questions/{textId}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<String> updateTextWithQuestions(@PathVariable String textId,
                                                           @RequestBody UploadTextWithQuestionsDTO dto) {
         uploadService.updateTextWithQuestions(textId, dto);
         return ResponseEntity.ok("Text with questions updated successfully");
     }
 
-    @PostMapping("/create-test")
+    @PostMapping(value = "/create-test", produces = "application/json;charset=UTF-8")
     public ResponseEntity<String> createTest(@RequestBody CreateTestDTO createTestDTO) {
         try {
             testService.createTest(createTestDTO);

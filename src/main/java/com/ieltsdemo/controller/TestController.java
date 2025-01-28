@@ -20,12 +20,12 @@ public class TestController {
         this.testService = testService;
     }
 
-    @GetMapping()
+    @GetMapping(value = "/", produces = "application/json;charset=UTF-8")
     public List<TestDTO> getTests(@RequestParam String email, @RequestParam ExamType examType) {
         return testService.getTestsByExamTypeAndEmail(email, examType);
     }
 
-    @GetMapping("/all")
+    @GetMapping(value = "/all", produces = "application/json;charset=UTF-8")
     public List<TestDTO> getAllTests(@RequestParam ExamType examType) {
         return testService.getTestsByExamType(examType);
     }

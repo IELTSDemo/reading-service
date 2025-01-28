@@ -17,12 +17,12 @@ public class ResultController {
         this.resultService = resultService;
     }
 
-    @GetMapping
+    @GetMapping(value = "/", produces = "application/json;charset=UTF-8")
     public List<Result> getAllResults() {
         return resultService.getAllResults();
     }
 
-    @PostMapping
+    @PostMapping(value = "/", produces = "application/json;charset=UTF-8")
     public Result createResult(@RequestBody Result result) {
         return resultService.createResult(result);
     }
