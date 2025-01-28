@@ -25,7 +25,7 @@ public class TextController {
      * @param section Секция текста
      * @return Список текстов
      */
-    @GetMapping(value = "/", produces = "application/json;charset=UTF-8")
+    @GetMapping
     public List<TextDTO> getTextsByTestIdAndSection(@RequestParam String testId, @RequestParam SectionType section) {
         return textService.findTextByTestIdAndSection(testId, section);
     }
